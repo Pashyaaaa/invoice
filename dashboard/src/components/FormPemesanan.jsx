@@ -32,9 +32,8 @@ export default function FormPemesanan() {
   }
 
   return (
-    <section className='bg-slate-300 p-4 rounded-xl'>
-      <h2 className='font-bold text-2xl mb-6'>Invoice Pelanggan</h2>
-      <form onSubmit={handleSubmit}>
+    <section className='p-4'>
+      <form onSubmit={handleSubmit} className='max-w-2xl'>
         <div className="mb-5">
           <label
             htmlFor="nama"
@@ -45,7 +44,7 @@ export default function FormPemesanan() {
             type="text"
             id="nama"
             name="nama"
-            className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            className="bg-gray-50 border border-gray-400 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
             placeholder="John Doe"
             required
             value={nama}
@@ -62,7 +61,7 @@ export default function FormPemesanan() {
             type="tel"
             id="noHP"
             name="noHP"
-            className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            className="bg-gray-50 border border-gray-400 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
             placeholder="John Doe"
             required
             value={noHP}
@@ -79,7 +78,7 @@ export default function FormPemesanan() {
             type="text"
             id="alamat"
             name="alamat"
-            className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            className="bg-gray-50 border border-gray-400 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
             placeholder="John Doe"
             required
             value={alamat}
@@ -109,7 +108,7 @@ export default function FormPemesanan() {
                 selected={tanggalBooking}
                 onChange={date => setTanggalBooking(date)}
                 startDate={tanggalBooking}
-                className='bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 " placeholder="Select date end'
+                className='bg-gray-50 border border-gray-400 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 " placeholder="Select date end'
                 placeholderText="Booking"
                 required
               />
@@ -133,7 +132,7 @@ export default function FormPemesanan() {
                 endDate={tanggalCheckout}
                 startDate={tanggalBooking}
                 minDate={tanggalBooking}
-                className='bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 '
+                className='bg-gray-50 border border-gray-400 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 '
                 placeholderText="Checkout"
                 required
               />
@@ -150,7 +149,7 @@ export default function FormPemesanan() {
           <input
             type="number"
             id="total"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-56 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-56 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             required
             value={totalPembayaran}
             onChange={e => setTotalPembayaran(e.target.value)}
@@ -158,7 +157,7 @@ export default function FormPemesanan() {
         </div>
         <button
           type="submit"
-          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg w-full sm:w-auto px-5 py-2.5 text-center ">
+          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-400 font-medium rounded-lg w-full sm:w-auto px-5 py-2.5 text-center ">
           Submit
         </button>
       </form>
