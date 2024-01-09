@@ -9,7 +9,7 @@ import {
   RouterProvider,
 } from "react-router-dom"
 import axios from 'axios'
-import DaftarPelanggan from './pages/DaftarPelanggan.jsx'
+import DaftarPelangganPage from './pages/DaftarPelangganPage.jsx'
 
 axios.defaults.withCredentials = true
 
@@ -28,7 +28,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/dashboard/daftar-pelanggan",
-    element: <DaftarPelanggan />
+    element: <DaftarPelangganPage />
   },
 ])
 

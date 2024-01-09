@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useState } from 'react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 
@@ -26,26 +26,30 @@ export default function FormPemesanan() {
       nama,
       noHP,
       alamat,
-      tanggalPemesanan: { tanggalBooking, tanggalCheckout },
+      tanggalBooking,
+      tanggalCheckout,
       totalPembayaran: `Rp ${totalPembayaran.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`
     })
   }
 
   return (
     <section className='p-4'>
-      <form onSubmit={handleSubmit} className='max-w-2xl'>
+      <form
+        onSubmit={handleSubmit}
+        className='max-w-2xl'
+      >
         <div className="mb-5">
           <label
             htmlFor="nama"
             className="block mb-2 font-medium text-gray-900">
-            Nama Pelanggan
+            Nama
           </label>
           <input
             type="text"
             id="nama"
             name="nama"
             className="bg-gray-50 border border-gray-400 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-            placeholder="John Doe"
+            placeholder="Nama Pelanggan"
             required
             value={nama}
             onChange={e => setNama(e.target.value)}
@@ -55,14 +59,14 @@ export default function FormPemesanan() {
           <label
             htmlFor="noHP"
             className="block mb-2 font-medium text-gray-900">
-            Nomor HP Pelanggan
+            Nomor Telepon
           </label>
           <input
             type="tel"
             id="noHP"
             name="noHP"
             className="bg-gray-50 border border-gray-400 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-            placeholder="John Doe"
+            placeholder="Nomor Telepon Pelanggan"
             required
             value={noHP}
             onChange={e => setNoHP(e.target.value)}
@@ -72,14 +76,14 @@ export default function FormPemesanan() {
           <label
             htmlFor="alamat"
             className="block mb-2 font-medium text-gray-900">
-            Alamat Pelanggan
+            Alamat
           </label>
           <input
             type="text"
             id="alamat"
             name="alamat"
             className="bg-gray-50 border border-gray-400 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-            placeholder="John Doe"
+            placeholder="Alamat Pelanggan"
             required
             value={alamat}
             onChange={e => setAlamat(e.target.value)}
@@ -94,9 +98,15 @@ export default function FormPemesanan() {
           <div className="flex items-center">
             <div className="relative">
               <div className="absolute z-10 inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                  <svg className="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
-                  </svg>
+                <svg 
+                  className="w-4 h-4 text-gray-500"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                </svg>
               </div>
               <DatePicker
                 showTimeSelect
@@ -113,12 +123,17 @@ export default function FormPemesanan() {
                 required
               />
             </div>
-            <span className="mx-4 text-gray-500">to</span>
+            <span className="mx-4 text-gray-500">ke</span>
             <div className="relative">
               <div className="absolute z-10 inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                  <svg className="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
-                  </svg>
+                <svg
+                  className="w-4 h-4 text-gray-500"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                </svg>
               </div>
               <DatePicker
                 showTimeSelect
@@ -142,14 +157,14 @@ export default function FormPemesanan() {
         <div className="mb-5">
           <label
             htmlFor="total"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            className="block mb-2 text-sm font-medium text-gray-900"
           >
             Total Harga
           </label>
           <input
             type="number"
             id="total"
-            className="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-56 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-56 p-2.5"
             required
             value={totalPembayaran}
             onChange={e => setTotalPembayaran(e.target.value)}
