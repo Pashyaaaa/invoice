@@ -8,7 +8,7 @@ export const daftarPelanggan = [
     tanggalCheckin: "12 Januari 2024",
     tanggalCheckout: "13 Januari 2024",
     totalPembayaran: 1000000,
-    sisaBayarInvoice: 100000
+    sisaBayarInvoice: 0
   },
   {
     id: 2,
@@ -19,6 +19,6 @@ export const daftarPelanggan = [
     tanggalCheckin: "20 Januari 2024",
     tanggalCheckout: "24 Januari 2024",
     totalPembayaran: 4000000,
-    sisaBayarInvoice: 400000
+    sisaBayarInvoice: 0
   },
 ]

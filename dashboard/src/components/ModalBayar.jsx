@@ -1,6 +1,4 @@
 import { useState } from 'react'
-import DatePicker from 'react-datepicker'
-import 'react-datepicker/dist/react-datepicker.css'
 import getPelanggan from '../libs/getPelanggan'
 import {
   useLoaderData,
@@ -15,14 +13,15 @@ export function loader({ params }) {
 export default function ModalBayar() {
   const navigate = useNavigate()
   const { pelanggan } = useLoaderData()
-
-  const [nama, setNama] = useState(pelanggan[0].nama)
-  const [noHP, setNoHP] = useState(pelanggan[0].noHP)
-  const [alamat, setAlamat] = useState(pelanggan[0].alamat)
-  const [tanggalBooking, setTanggalBooking] = useState()
-  const [tanggalCheckout, setTanggalCheckout] = useState()
-  const [totalPembayaran, setTotalPembayaran] = useState(pelanggan[0].totalPembayaran)
   const [bayarInvoice, setBayarInvoice] = useState(pelanggan[0].sisaBayarInvoice)
+  const [keteranganPembayaran, setKeteranganPembayaran] = useState('')
+
+  const nama = pelanggan[0].nama
+  const noHP = pelanggan[0].noHP
+  const alamat = pelanggan[0].alamat
+  const tanggalBooking = pelanggan[0].tanggalCheckin
+  const tanggalCheckout = pelanggan[0].tanggalCheckout
+  const totalPembayaran = pelanggan[0].totalPembayaran
 
   const handleInputClick = (e) => {
     e.stopPropagation()
@@ -34,28 +33,21 @@ export default function ModalBayar() {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-
-    // Reset form fields
-    setNama('')
-    setNoHP('')
-    setAlamat('')
-    setTanggalBooking('')
-    setTanggalCheckout('')
-    setTotalPembayaran(0)
     setBayarInvoice(0)
-
+    setKeteranganPembayaran('')
     const sisaBayar = totalPembayaran - bayarInvoice
-
     console.log({
       nama,
       noHP,
       alamat,
       tanggalBooking,
       tanggalCheckout,
+      keteranganPembayaran,
       totalPembayaran: `Rp ${totalPembayaran.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`,
       pembayaranInvoice: `Rp ${bayarInvoice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`,
       sisaPembayaran: `Rp ${sisaBayar.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`
     })
+    navigate(-1)
   }
 
   return (
@@ -95,156 +87,73 @@ export default function ModalBayar() {
             <div className='divide-y divide-slate-700'>
               <div>
                 <div className="mb-5">
-                  <label
-                    htmlFor="name"
-                    className="block mb-2 text-sm font-medium text-gray-900"
-                  >
-                    Nama
-                  </label>
-                  <input
-                    type="text"
-                    name="name"
-                    id="name"
-                    className="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                    placeholder="Nama Pelanggan"
-                    required
-                    onClick={handleInputClick}
-                    onFocus={handleInputFocus}
-                    value={nama}
-                    onChange={e => setNama(e.target.value)}
-                  />
+                  <span className="block mb-2 text-sm font-medium text-gray-900">Nama :</span>
+                  <span className="bg-gray-100 border border-gray-400 font-medium text-gray-900 text-sm rounded-lg block w-full p-2.5">{nama}</span>
                 </div>
                 <div className="mb-5">
-                  <label
-                    htmlFor="noHP"
-                    className="block mb-2 text-sm font-medium text-gray-900"
-                  >
-                    Nomor Telepon
-                  </label>
-                  <input
-                    type="tel"
-                    name="noHP"
-                    id="noHP"
-                    className="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                    placeholder="Nomor Telepon Pelanggan"
-                    required
-                    onClick={handleInputClick}
-                    onFocus={handleInputFocus}
-                    value={noHP}
-                    onChange={e => setNoHP(e.target.value)}
-                  />
+                  <span className="block mb-2 text-sm font-medium text-gray-900">Nomor Telepon :</span>
+                  <span className="bg-gray-100 border border-gray-400 font-medium text-gray-900 text-sm rounded-lg block w-full p-2.5">{noHP}</span>
                 </div>
                 <div className="mb-5">
-                  <label
-                    htmlFor="alamat"
-                    className="block mb-2 text-sm font-medium text-gray-900"
-                  >
-                    Alamat
-                  </label>
-                  <input
-                    type="text"
-                    name="alamat"
-                    id="alamat"
-                    className="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                    placeholder="Alamat Pelanggan"
-                    required
-                    onClick={handleInputClick}
-                    onFocus={handleInputFocus}
-                    value={alamat}
-                    onChange={e => setAlamat(e.target.value)}
-                  />
+                  <span className="block mb-2 text-sm font-medium text-gray-900">Alamat :</span>
+                  <span className="bg-gray-100 border border-gray-400 font-medium text-gray-900 text-sm rounded-lg block w-full p-2.5">{alamat}</span>
                 </div>
                 <div className="mb-5">
-                  <label
-                    htmlFor="alamat"
-                    className="block mb-2 font-medium text-sm text-gray-900">
-                    Tanggal Booking & Checkout
-                  </label>
+                  <span className="block mb-2 font-medium text-sm text-gray-900">Tanggal Checkin & Checkout :</span>
                   <div className="flex items-center">
-                    <div className="relative">
-                      <div className="absolute z-10 inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                        <svg 
-                          className="w-4 h-4 text-gray-500"
-                          aria-hidden="true"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                        >
-                          <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
-                        </svg>
-                      </div>
-                      <DatePicker
-                        showTimeSelect
-                        minTime={new Date(0, 0, 0, 12, 30)}
-                        maxTime={new Date(0, 0, 0, 19, 0)}
-                        dateFormat="MMMM d, yyyy h:mmaa"
-                        selectsStart
-                        value={tanggalBooking}
-                        selected={tanggalBooking}
-                        onChange={date => setTanggalBooking(date)}
-                        startDate={tanggalBooking}
-                        className='bg-gray-50 border border-gray-400 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 " placeholder="Select date end'
-                        placeholderText="Booking"
-                        required
-                      />
-                    </div>
+                    <span className="bg-gray-100 border border-gray-400 font-medium text-gray-900 text-sm rounded-lg block w-full p-2.5">{tanggalBooking}</span>
                     <span className="mx-4 text-gray-500">ke</span>
-                    <div className="relative">
-                      <div className="absolute z-10 inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                        <svg
-                          className="w-4 h-4 text-gray-500"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                        >
-                          <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
-                        </svg>
-                      </div>
-                      <DatePicker
-                        showTimeSelect
-                        minTime={new Date(0, 0, 0, 12, 30)}
-                        maxTime={new Date(0, 0, 0, 19, 0)}
-                        dateFormat="MMMM d, yyyy h:mmaa"
-                        selectsEnd
-                        value={tanggalCheckout}
-                        selected={tanggalCheckout}
-                        onChange={date => setTanggalCheckout(date)}
-                        endDate={tanggalCheckout}
-                        startDate={tanggalBooking}
-                        minDate={tanggalBooking}
-                        className='bg-gray-50 border border-gray-400 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 '
-                        placeholderText="Checkout"
-                        required
-                      />
-                    </div>
+                    <span className="bg-gray-100 border border-gray-400 font-medium text-gray-900 text-sm rounded-lg block w-full p-2.5">{tanggalCheckout}</span>
                   </div>
                 </div>
                 <div className="mb-5">
                   <div className='flex items-center justify-between mb-2 text-sm font-medium text-gray-900'>
-                    <span>Total pembayaran</span>
+                    <span>Total pembayaran :</span>
                     <span>Rp {totalPembayaran.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</span>
                   </div>
                 </div>
               </div>
-              <div className="mb-5 pt-5">
-                <label
-                  htmlFor="bayarInvoice"
-                  className="block mb-2 text-sm font-medium text-gray-900"
-                >
-                  Bayar Invoice
-                </label>
-                <input
-                  type="number"
-                  name="bayarInvoice"
-                  id="bayarInvoice"
-                  className="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                  placeholder="Nomor Telepon Pelanggan"
-                  required
-                  onClick={handleInputClick}
-                  onFocus={handleInputFocus}
-                  value={bayarInvoice}
-                  onChange={e => setBayarInvoice(e.target.value)}
-                />
+              <div className="pt-5">
+                <div className="mb-5">
+                  <label
+                    htmlFor="bayarInvoice"
+                    className="block mb-2 text-sm font-medium text-gray-900"
+                  >
+                    Bayar Invoice
+                  </label>
+                  <input
+                    type="number"
+                    name="bayarInvoice"
+                    id="bayarInvoice"
+                    className="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                    placeholder="Pasang nominal"
+                    required
+                    onClick={handleInputClick}
+                    onFocus={handleInputFocus}
+                    value={bayarInvoice}
+                    onChange={e => setBayarInvoice(e.target.value)}
+                  />
+                </div>
+                <div className="mb-5">
+                  <label
+                    htmlFor="keteranganInvoice"
+                    className="block mb-2 text-sm font-medium text-gray-900"
+                  >
+                    Keterangan
+                  </label>
+                  <input
+                    type="text"
+                    name="keteranganInvoice"
+                    id="keteranganInvoice"
+                    className="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                    placeholder="Keterangan pembayaran"
+                    required
+                    onClick={handleInputClick}
+                    onFocus={handleInputFocus}
+                    value={keteranganPembayaran}
+                    onChange={e => setKeteranganPembayaran(e.target.value)}
+                  />
+                </div>
               </div>
             </div>
             <button

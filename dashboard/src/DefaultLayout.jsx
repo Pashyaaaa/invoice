@@ -60,7 +60,7 @@ export default function DefaultLayout({ children, page }) {
             </div>
             <div className="flex items-center">
               <div className="flex items-center gap-x-6 ms-3">
-                <span className="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">{name}</span>
+                <span className="hidden bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300 md:inline-block">{name}</span>
                 <div>
                   <button
                     type="button"
