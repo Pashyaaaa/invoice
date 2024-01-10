@@ -10,6 +10,8 @@ import {
 } from "react-router-dom"
 import axios from 'axios'
 import DaftarPelangganPage from './pages/DaftarPelangganPage.jsx'
+import ModalBayar, { loader as modalLoader } from './components/ModalBayar.jsx'
+import { loader as rootLoader } from './components/ListPelanggan.jsx'
 
 axios.defaults.withCredentials = true
 
@@ -28,7 +30,15 @@ const router = createBrowserRouter([
   },
   {
     path: "/dashboard/daftar-pelanggan",
-    element: <DaftarPelangganPage />
+    element: <DaftarPelangganPage />,
+    loader: rootLoader,
+    children: [
+      {
+        path: "/dashboard/daftar-pelanggan/bayar-invoice/:id",
+        element: <ModalBayar />,
+        loader: modalLoader
+      }
+    ]
   },
 ])
 

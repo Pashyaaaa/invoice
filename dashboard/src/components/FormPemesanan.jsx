@@ -7,7 +7,7 @@ export default function FormPemesanan() {
   const [nama, setNama] = useState('')
   const [noHP, setNoHP] = useState('')
   const [alamat, setAlamat] = useState('')
-  const [tanggalBooking, setTanggalBooking] = useState()
+  const [tanggalCheckin, setTanggalCheckin] = useState()
   const [tanggalCheckout, setTanggalCheckout] = useState()
   const [totalPembayaran, setTotalPembayaran] = useState(0)
 
@@ -18,7 +18,7 @@ export default function FormPemesanan() {
     setNama('')
     setNoHP('')
     setAlamat('')
-    setTanggalBooking('')
+    setTanggalCheckin('')
     setTanggalCheckout('')
     setTotalPembayaran(0)
 
@@ -26,7 +26,7 @@ export default function FormPemesanan() {
       nama,
       noHP,
       alamat,
-      tanggalBooking,
+      tanggalCheckin,
       tanggalCheckout,
       totalPembayaran: `Rp ${totalPembayaran.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`
     })
@@ -114,12 +114,12 @@ export default function FormPemesanan() {
                 maxTime={new Date(0, 0, 0, 19, 0)}
                 dateFormat="MMMM d, yyyy h:mmaa"
                 selectsStart
-                value={tanggalBooking}
-                selected={tanggalBooking}
-                onChange={date => setTanggalBooking(date)}
-                startDate={tanggalBooking}
+                value={tanggalCheckin}
+                selected={tanggalCheckin}
+                onChange={date => setTanggalCheckin(date)}
+                startDate={tanggalCheckin}
                 className='bg-gray-50 border border-gray-400 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 " placeholder="Select date end'
-                placeholderText="Booking"
+                placeholderText="Checkin"
                 required
               />
             </div>
@@ -145,8 +145,8 @@ export default function FormPemesanan() {
                 selected={tanggalCheckout}
                 onChange={date => setTanggalCheckout(date)}
                 endDate={tanggalCheckout}
-                startDate={tanggalBooking}
-                minDate={tanggalBooking}
+                startDate={tanggalCheckin}
+                minDate={tanggalCheckin}
                 className='bg-gray-50 border border-gray-400 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 '
                 placeholderText="Checkout"
                 required

@@ -1,15 +1,25 @@
 import { useState } from 'react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
+import { useLoaderData, useNavigate } from "react-router-dom"
+import getPelanggan from '../libs/getPelanggan'
 
-export default function ModalBayar({ isOpen, onClick }) {
-  const [nama, setNama] = useState('Evan Rafa Radya Alifian')
-  const [noHP, setNoHP] = useState('087852386596')
-  const [alamat, setAlamat] = useState('jl. Nangka 6 No. 21 Perumanas, Kamal')
+export function loader({ params }) {
+  const pelanggan = getPelanggan(params.id)
+  return { pelanggan }
+}
+
+export default function ModalBayar() {
+  const navigate = useNavigate()
+  const { pelanggan } = useLoaderData()
+
+  const [nama, setNama] = useState(pelanggan[0].nama)
+  const [noHP, setNoHP] = useState(pelanggan[0].noHP)
+  const [alamat, setAlamat] = useState(pelanggan[0].alamat)
   const [tanggalBooking, setTanggalBooking] = useState()
   const [tanggalCheckout, setTanggalCheckout] = useState()
-  const [totalPembayaran, setTotalPembayaran] = useState(1000000)
-  const [bayarInvoice, setBayarInvoice] = useState(0)
+  const [totalPembayaran, setTotalPembayaran] = useState(pelanggan[0].totalPembayaran)
+  const [bayarInvoice, setBayarInvoice] = useState(pelanggan[0].sisaBayarInvoice)
 
   const handleInputClick = (e) => {
     e.stopPropagation()
@@ -47,11 +57,11 @@ export default function ModalBayar({ isOpen, onClick }) {
 
   return (
     <div
-      className={`${isOpen ? '' : 'hidden'} bg-black/60 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full h-screen`}
-      onClick={onClick}
+      className="bg-black/60 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full h-screen"
+      onClick={() => navigate(-1)}
     >
       <div
-        className="relative p-4 w-full max-w-md max-h-full"
+        className="absolute p-4 w-full max-w-md max-h-full"
         onClick={e => e.stopPropagation()}
       >
         <div className="relative bg-white rounded-lg shadow">
@@ -62,7 +72,7 @@ export default function ModalBayar({ isOpen, onClick }) {
             <button
               type="button"
               className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center"
-              onClick={onClick}
+              onClick={() => navigate(-1)}
             >
               <svg
                 className="w-3 h-3"
