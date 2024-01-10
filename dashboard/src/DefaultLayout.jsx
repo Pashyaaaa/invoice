@@ -6,7 +6,8 @@ import { FaSignOutAlt } from "react-icons/fa"
 import { useState } from "react"
 import {
   useNavigate,
-  Link
+  Link,
+  NavLink
 } from "react-router-dom"
 
 export default function DefaultLayout({ children, page }) {
@@ -80,22 +81,22 @@ export default function DefaultLayout({ children, page }) {
         <div className="h-full px-3 pb-4 overflow-y-auto bg-white">
           <ul className="space-y-2 font-medium">
             <li>
-              <Link
+              <NavLink
                 to={'/'}
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 group"
+                className={({ isActive }) => isActive ? 'flex items-center p-2 rounded-lg bg-gray-200 group' : 'flex items-center p-2 rounded-lg hover:bg-gray-200 group'}
               >
                 <MdPersonAddAlt1 className="text-2xl text-gray-600 transition duration-75 group-hover:text-gray-900" />
                 <span className="ms-3 text-gray-600 transition duration-75 group-hover:text-gray-900">Tambah Pelanggan</span>
-              </Link>
+              </NavLink>
             </li>
             <li>
-              <Link
+              <NavLink
                 to={'/dashboard/daftar-pelanggan'}
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 group"
+                className={({ isActive }) => isActive ? 'flex items-center p-2 rounded-lg bg-gray-200 group' : 'flex items-center p-2 rounded-lg hover:bg-gray-200 group'}
               >
                 <PiUserListFill className="text-2xl text-gray-600 transition duration-75 group-hover:text-gray-900" />
                 <span className="ms-3 text-gray-600 transition duration-75 group-hover:text-gray-900">Daftar Pelanggan</span>
-              </Link>
+              </NavLink>
             </li>
           </ul>
         </div>

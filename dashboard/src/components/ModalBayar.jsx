@@ -1,8 +1,11 @@
 import { useState } from 'react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
-import { useLoaderData, useNavigate } from "react-router-dom"
 import getPelanggan from '../libs/getPelanggan'
+import {
+  useLoaderData,
+  useNavigate
+} from "react-router-dom"
 
 export function loader({ params }) {
   const pelanggan = getPelanggan(params.id)
