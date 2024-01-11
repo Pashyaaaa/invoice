@@ -1,18 +1,54 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
+import axios from 'axios'
 
 export default function FormPemesanan() {
-  const [date, setDate] = useState(new Date())
   const [nama, setNama] = useState('')
   const [noHP, setNoHP] = useState('')
   const [alamat, setAlamat] = useState('')
-  const [tanggalCheckin, setTanggalCheckin] = useState()
-  const [tanggalCheckout, setTanggalCheckout] = useState()
+  const [tanggalCheckin, setTanggalCheckin] = useState(new Date())
+  const [tanggalCheckout, setTanggalCheckout] = useState(new Date())
   const [totalPembayaran, setTotalPembayaran] = useState(0)
+  const [durasi, setDurasi] = useState(0) // Variable untuk menyimpan durasi pemesanan
+  const [isAlert, setIsAlert] = useState(false)
+  const [errorAlert, setErrorAlert] = useState()
+  const [textAlert, setTextAlert] = useState('')
 
-  const handleSubmit = (e) => {
+  useEffect(() => {
+    // Menghitung durasi saat terjadi perubahan pada tanggalCheckin atau tanggalCheckout
+    if (tanggalCheckin && tanggalCheckout) {
+      const diffInTime = tanggalCheckout.getTime() - tanggalCheckin.getTime()
+      const diffInDays = Math.ceil(diffInTime / (1000 * 60 * 60 * 24))
+      setDurasi(diffInDays)
+    }
+  }, [tanggalCheckin, tanggalCheckout])
+
+  const handleSubmit = async (e) => {
     e.preventDefault()
+
+    const formData = new FormData()
+    formData.append('name', nama)
+    formData.append('number', noHP)
+    formData.append('address', alamat)
+    formData.append('day', durasi.toString()) // Mengirim durasi pemesanan
+    formData.append('check_in', tanggalCheckin)
+    formData.append('check_out', tanggalCheckout)
+
+    try {
+      await axios.post(`${import.meta.env.VITE_API_URL}/invoices`, formData, {
+        headers: {
+          "Content-type": "application/json"
+        }
+      })
+      setIsAlert(true)
+      setErrorAlert(false)
+      setTextAlert('Sukses! Pelanggan berhasil ditambahkan.')
+    } catch (error) {
+      setIsAlert(true)
+      setErrorAlert(true)
+      setTextAlert('Gagal! Pelanggan gagal ditambahkan.')
+    }
 
     // Reset form fields
     setNama('')
@@ -21,15 +57,7 @@ export default function FormPemesanan() {
     setTanggalCheckin('')
     setTanggalCheckout('')
     setTotalPembayaran(0)
-
-    console.log({
-      nama,
-      noHP,
-      alamat,
-      tanggalCheckin,
-      tanggalCheckout,
-      totalPembayaran: `Rp ${totalPembayaran.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`
-    })
+    setDurasi(0)
   }
 
   return (
@@ -38,6 +66,36 @@ export default function FormPemesanan() {
         onSubmit={handleSubmit}
         className='max-w-2xl'
       >
+        {isAlert && (
+          <div className={`flex items-center p-4 mb-4 ${errorAlert ? 'text-red-800 border-t-4 border-red-300 bg-red-50  ' : 'text-green-800 border-t-4 border-green-300 bg-green-50'}`}>
+            <svg
+              className="flex-shrink-0 w-4 h-4"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+            </svg>
+            <div className="ms-3 text-sm font-medium md:text-base">
+              {textAlert}
+            </div>
+            <button
+              type="button"
+              className={`ms-auto -mx-1.5 -my-1.5 rounded-lg focus:ring-2  p-1.5 inline-flex items-center justify-center h-8 w-8 ${errorAlert ? 'bg-red-50 text-red-500 focus:ring-red-400 hover:bg-red-200' : 'bg-green-50 text-green-500 focus:ring-green-400 hover:bg-green-200'}`}
+              onClick={() => setIsAlert(!isAlert)}
+            >
+              <span className="sr-only">Dismiss</span>
+              <svg className="w-3 h-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                <path
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                />
+              </svg>
+            </button>
+          </div>
+        )}
         <div className="mb-5">
           <label
             htmlFor="nama"
@@ -100,7 +158,6 @@ export default function FormPemesanan() {
               <div className="absolute z-10 inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                 <svg 
                   className="w-4 h-4 text-gray-500"
-                  aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
                   viewBox="0 0 20 20"
