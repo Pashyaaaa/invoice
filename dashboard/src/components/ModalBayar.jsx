@@ -1,6 +1,7 @@
-import { useState } from "react"
 import getPelanggan from "../libs/getPelanggan"
-import { getFormatDate } from "../../public/getFormatDate"
+import axios from "axios"
+import { useState } from "react"
+import { getFormatDate } from "/public/getFormatDate.js"
 import {
   useLoaderData,
   useNavigate
@@ -15,7 +16,7 @@ export default function ModalBayar() {
   const navigate = useNavigate()
   const { pelanggan } = useLoaderData()
 
-  const [bayarInvoice, setBayarInvoice] = useState(pelanggan.sisa_bayar)
+  const [bayarInvoice, setBayarInvoice] = useState(0)
   const [keteranganPembayaran, setKeteranganPembayaran] = useState('')
 
   const handleInputClick = (e) => {
@@ -26,23 +27,27 @@ export default function ModalBayar() {
     e.stopPropagation()
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
+
+    const formData = new FormData()
+    formData.append('bayar', bayarInvoice)
+    formData.append('keterangan', keteranganPembayaran)
+    formData.append('invoice_id', pelanggan.id)
+
+    try {
+      await axios.post(`${import.meta.env.VITE_API_URL}/pembayaran`, formData, {
+        headers: {
+          "Content-type": "application/json"
+        }
+      })
+    } catch (error) {
+      console.log(error)
+    }
+
     setBayarInvoice(0)
     setKeteranganPembayaran('')
-    const sisaBayar = totalPembayaran - bayarInvoice
-    console.log({
-      nama,
-      noHP,
-      alamat,
-      tanggalBooking,
-      tanggalCheckout,
-      keteranganPembayaran,
-      totalPembayaran: `Rp ${totalPembayaran.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`,
-      pembayaranInvoice: `Rp ${bayarInvoice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`,
-      sisaPembayaran: `Rp ${sisaBayar.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`
-    })
-    navigate(-1)
+    navigate('/dashboard/daftar-pelanggan')
   }
 
   return (

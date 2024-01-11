@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react'
-import DatePicker from 'react-datepicker'
-import 'react-datepicker/dist/react-datepicker.css'
-import { set, format } from 'date-fns';
-import { utcToZonedTime } from 'date-fns-tz';
-import axios from 'axios'
+import { useEffect, useState } from "react"
+import DatePicker from "react-datepicker"
+import "react-datepicker/dist/react-datepicker.css"
+import { set, format } from "date-fns";
+import { utcToZonedTime } from "date-fns-tz";
+import axios from "axios"
 
 export default function FormPemesanan() {
   const [nama, setNama] = useState('')
@@ -60,8 +60,16 @@ export default function FormPemesanan() {
     setNama('')
     setNoHP('')
     setAlamat('')
-    setTanggalCheckin('')
-    setTanggalCheckout('')
+    setTanggalCheckin(() => {
+      // Set tanggal default dengan zona waktu Asia/Jakarta dan jam 13:00:00
+      const defaultDate = set(new Date(), { hours: 13, minutes: 0, seconds: 0, milliseconds: 0 });
+      return utcToZonedTime(defaultDate, 'Asia/Jakarta');
+    })
+    setTanggalCheckout(() => {
+      // Set tanggal default dengan zona waktu Asia/Jakarta dan jam 13:00:00
+      const defaultDate = set(new Date(), { hours: 13, minutes: 0, seconds: 0, milliseconds: 0 });
+      return utcToZonedTime(defaultDate, 'Asia/Jakarta');
+    })
     setTotalPembayaran(0)
     setDurasi(0)
   }

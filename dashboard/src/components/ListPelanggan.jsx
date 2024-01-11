@@ -4,7 +4,7 @@ import {
   useLoaderData
 } from "react-router-dom"
 import getAllPelanggan from "../libs/getAllpelanggan"
-import { getFormatDate } from "../../public/getFormatDate"
+import { getFormatDate } from "/public/getFormatDate.js"
 
 export async function loader() {
   const pelanggan = await getAllPelanggan()
