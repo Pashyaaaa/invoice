@@ -1,32 +1,37 @@
 import { useEffect, useState } from 'react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
+import { set, format } from 'date-fns';
+import { utcToZonedTime } from 'date-fns-tz';
 import axios from 'axios'
 
 export default function FormPemesanan() {
   const [nama, setNama] = useState('')
   const [noHP, setNoHP] = useState('')
   const [alamat, setAlamat] = useState('')
-  const [tanggalCheckin, setTanggalCheckin] = useState(new Date())
-  const [tanggalCheckout, setTanggalCheckout] = useState(new Date())
+  const [tanggalCheckin, setTanggalCheckin] = useState(() => {
+    // Set tanggal default dengan zona waktu Asia/Jakarta dan jam 13:00:00
+    const defaultDate = set(new Date(), { hours: 13, minutes: 0, seconds: 0, milliseconds: 0 });
+    return utcToZonedTime(defaultDate, 'Asia/Jakarta');
+  })
+  const [tanggalCheckout, setTanggalCheckout] = useState(() => {
+    // Set tanggal default dengan zona waktu Asia/Jakarta dan jam 13:00:00
+    const defaultDate = set(new Date(), { hours: 13, minutes: 0, seconds: 0, milliseconds: 0 });
+    return utcToZonedTime(defaultDate, 'Asia/Jakarta');
+  })
   const [totalPembayaran, setTotalPembayaran] = useState(0)
   const [durasi, setDurasi] = useState(0) // Variable untuk menyimpan durasi pemesanan
   const [isAlert, setIsAlert] = useState(false)
   const [errorAlert, setErrorAlert] = useState()
   const [textAlert, setTextAlert] = useState('')
 
-  useEffect(() => {
-    // Menghitung durasi saat terjadi perubahan pada tanggalCheckin atau tanggalCheckout
-    if (tanggalCheckin && tanggalCheckout) {
-      const diffInTime = tanggalCheckout.getTime() - tanggalCheckin.getTime()
-      const diffInDays = Math.ceil(diffInTime / (1000 * 60 * 60 * 24))
-      setDurasi(diffInDays)
-    }
-  }, [tanggalCheckin, tanggalCheckout])
+  const handleDateChange = (date) => {
+    setTanggalCheckin(date);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-
+    
     const formData = new FormData()
     formData.append('name', nama)
     formData.append('number', noHP)
@@ -34,7 +39,7 @@ export default function FormPemesanan() {
     formData.append('day', durasi.toString()) // Mengirim durasi pemesanan
     formData.append('check_in', tanggalCheckin)
     formData.append('check_out', tanggalCheckout)
-
+    
     try {
       await axios.post(`${import.meta.env.VITE_API_URL}/invoices`, formData, {
         headers: {
@@ -44,12 +49,13 @@ export default function FormPemesanan() {
       setIsAlert(true)
       setErrorAlert(false)
       setTextAlert('Sukses! Pelanggan berhasil ditambahkan.')
+      console.log(tanggalCheckin)
     } catch (error) {
       setIsAlert(true)
       setErrorAlert(true)
       setTextAlert('Gagal! Pelanggan gagal ditambahkan.')
     }
-
+    
     // Reset form fields
     setNama('')
     setNoHP('')
@@ -59,6 +65,15 @@ export default function FormPemesanan() {
     setTotalPembayaran(0)
     setDurasi(0)
   }
+  
+  useEffect(() => {
+    // Menghitung durasi saat terjadi perubahan pada tanggalCheckin atau tanggalCheckout
+    if (tanggalCheckin && tanggalCheckout) {
+      const diffInTime = tanggalCheckout.getTime() - tanggalCheckin.getTime()
+      const diffInDays = Math.ceil(diffInTime / (1000 * 60 * 60 * 24))
+      setDurasi(diffInDays)
+    }
+  }, [tanggalCheckin, tanggalCheckout])
 
   return (
     <section className='p-4'>
@@ -167,13 +182,15 @@ export default function FormPemesanan() {
               </div>
               <DatePicker
                 showTimeSelect
-                minTime={new Date(0, 0, 0, 12, 30)}
-                maxTime={new Date(0, 0, 0, 19, 0)}
-                dateFormat="MMMM d, yyyy h:mmaa"
+                timeFormat="HH:mm"
+                timeIntervals={15}
+                dateFormat="yyyy-MM-dd HH:mm"
+                timeCaption="Time"
+                timeZone="Asia/Jakarta"
                 selectsStart
                 value={tanggalCheckin}
                 selected={tanggalCheckin}
-                onChange={date => setTanggalCheckin(date)}
+                onChange={handleDateChange}
                 startDate={tanggalCheckin}
                 className='bg-gray-50 border border-gray-400 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 " placeholder="Select date end'
                 placeholderText="Checkin"
@@ -194,9 +211,11 @@ export default function FormPemesanan() {
               </div>
               <DatePicker
                 showTimeSelect
-                minTime={new Date(0, 0, 0, 12, 30)}
-                maxTime={new Date(0, 0, 0, 19, 0)}
-                dateFormat="MMMM d, yyyy h:mmaa"
+                timeFormat="HH:mm"
+                timeIntervals={15}
+                dateFormat="yyyy-MM-dd HH:mm"
+                timeCaption="Time"
+                timeZone="Asia/Jakarta"
                 selectsEnd
                 value={tanggalCheckout}
                 selected={tanggalCheckout}

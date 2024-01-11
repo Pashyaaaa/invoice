@@ -1,27 +1,22 @@
-import { useState } from 'react'
-import getPelanggan from '../libs/getPelanggan'
+import { useState } from "react"
+import getPelanggan from "../libs/getPelanggan"
+import { getFormatDate } from "../../public/getFormatDate"
 import {
   useLoaderData,
   useNavigate
 } from "react-router-dom"
 
-export function loader({ params }) {
-  const pelanggan = getPelanggan(params.id)
+export async function loader({ params }) {
+  const pelanggan = await getPelanggan(params.id)
   return { pelanggan }
 }
 
 export default function ModalBayar() {
   const navigate = useNavigate()
   const { pelanggan } = useLoaderData()
-  const [bayarInvoice, setBayarInvoice] = useState(pelanggan[0].sisaBayarInvoice)
-  const [keteranganPembayaran, setKeteranganPembayaran] = useState('')
 
-  const nama = pelanggan[0].nama
-  const noHP = pelanggan[0].noHP
-  const alamat = pelanggan[0].alamat
-  const tanggalBooking = pelanggan[0].tanggalCheckin
-  const tanggalCheckout = pelanggan[0].tanggalCheckout
-  const totalPembayaran = pelanggan[0].totalPembayaran
+  const [bayarInvoice, setBayarInvoice] = useState(pelanggan.sisa_bayar)
+  const [keteranganPembayaran, setKeteranganPembayaran] = useState('')
 
   const handleInputClick = (e) => {
     e.stopPropagation()
@@ -88,28 +83,28 @@ export default function ModalBayar() {
               <div>
                 <div className="mb-5">
                   <span className="block mb-2 text-sm font-medium text-gray-900">Nama :</span>
-                  <span className="bg-gray-100 border border-gray-400 font-medium text-gray-900 text-sm rounded-lg block w-full p-2.5">{nama}</span>
+                  <span className="bg-gray-100 border border-gray-400 font-medium text-gray-900 text-sm rounded-lg block w-full p-2.5">{pelanggan.name}</span>
                 </div>
                 <div className="mb-5">
                   <span className="block mb-2 text-sm font-medium text-gray-900">Nomor Telepon :</span>
-                  <span className="bg-gray-100 border border-gray-400 font-medium text-gray-900 text-sm rounded-lg block w-full p-2.5">{noHP}</span>
+                  <span className="bg-gray-100 border border-gray-400 font-medium text-gray-900 text-sm rounded-lg block w-full p-2.5">{pelanggan.number}</span>
                 </div>
                 <div className="mb-5">
                   <span className="block mb-2 text-sm font-medium text-gray-900">Alamat :</span>
-                  <span className="bg-gray-100 border border-gray-400 font-medium text-gray-900 text-sm rounded-lg block w-full p-2.5">{alamat}</span>
+                  <span className="bg-gray-100 border border-gray-400 font-medium text-gray-900 text-sm rounded-lg block w-full p-2.5">{pelanggan.address}</span>
                 </div>
                 <div className="mb-5">
                   <span className="block mb-2 font-medium text-sm text-gray-900">Tanggal Checkin & Checkout :</span>
                   <div className="flex items-center">
-                    <span className="bg-gray-100 border border-gray-400 font-medium text-gray-900 text-sm rounded-lg block w-full p-2.5">{tanggalBooking}</span>
+                    <span className="bg-gray-100 border border-gray-400 font-medium text-gray-900 text-sm rounded-lg block w-full p-2.5">{getFormatDate(pelanggan.check_in)}</span>
                     <span className="mx-4 text-gray-500">ke</span>
-                    <span className="bg-gray-100 border border-gray-400 font-medium text-gray-900 text-sm rounded-lg block w-full p-2.5">{tanggalCheckout}</span>
+                    <span className="bg-gray-100 border border-gray-400 font-medium text-gray-900 text-sm rounded-lg block w-full p-2.5">{getFormatDate(pelanggan.check_out)}</span>
                   </div>
                 </div>
                 <div className="mb-5">
                   <div className='flex items-center justify-between mb-2 text-sm font-medium text-gray-900'>
                     <span>Total pembayaran :</span>
-                    <span>Rp {totalPembayaran.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</span>
+                    <span>Rp {pelanggan.total.replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</span>
                   </div>
                 </div>
               </div>

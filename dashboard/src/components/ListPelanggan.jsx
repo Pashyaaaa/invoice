@@ -4,6 +4,7 @@ import {
   useLoaderData
 } from "react-router-dom"
 import getAllPelanggan from "../libs/getAllpelanggan"
+import { getFormatDate } from "../../public/getFormatDate"
 
 export async function loader() {
   const pelanggan = await getAllPelanggan()
@@ -12,13 +13,6 @@ export async function loader() {
 
 export default function ListPelanggan() {
   const { pelanggan } = useLoaderData()
-
-  function getFormatDate(dateString) {
-    const date = dateString.substr(0, 10)
-    const hours = dateString.substr(11, 5)
-
-    return `${date} (${hours})`
-  }
 
   return (
     <>
