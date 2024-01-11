@@ -11,6 +11,7 @@ import {
   addInvoice,
   deleteInvoice,
   getInvoice,
+  getInvoiceById,
 } from "../controller/InvoiceController.js";
 import {
   addPembayaran,
@@ -27,6 +28,7 @@ router.get("/token", refreshToken);
 
 // Invoice
 router.get("/invoices", getInvoice);
+router.get("/invoices/:id", getInvoiceById);
 router.post("/invoices", addInvoice);
 router.delete("/invoices/:id", deleteInvoice);
 

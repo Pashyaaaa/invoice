@@ -38,6 +38,43 @@ export const getInvoice = async (req, res) => {
   }
 };
 
+export const getInvoiceById = async (req, res) => {
+  try {
+    const invoice = await Invoice.findOne({
+      attributes: [
+        "id",
+        "name",
+        "number",
+        "address",
+        "day",
+        "check_in",
+        "check_out",
+        "total",
+        "sisa_bayar",
+        "createdAt",
+      ],
+      include: [
+        {
+          model: Pembayaran,
+          as: "pembayaran",
+          required: false,
+          where: {
+            isDeleted: false,
+          },
+          attributes: ["id", "bayar", "keterangan", "invoice_id"],
+        },
+      ],
+      where: {
+        isDeleted: false,
+        id: req.params.id,
+      },
+    });
+    res.json(invoice);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const addInvoice = async (req, res) => {
   const { name, number, address, day, check_in, check_out } = req.body;
 
