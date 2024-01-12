@@ -14,6 +14,7 @@ export default function DefaultLayout({ children, page }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   
   const { name } = useRefreshToken()
+  const username = name.charAt(0).toUpperCase() + name.slice(1)
   const navigate = useNavigate()
 
   const handleOpenSidebar = () => {
@@ -22,7 +23,7 @@ export default function DefaultLayout({ children, page }) {
 
   const handleLogout = async () => {
     try {
-      await axios.delete('http://localhost:5000/logout')
+      await axios.delete(`${import.meta.env.VITE_API_URL}/logout`)
       navigate('/login')
     } catch(error) {
       console.log(error)
@@ -105,7 +106,7 @@ export default function DefaultLayout({ children, page }) {
       <main className="p-4 sm:ml-64">
         <header className="p-4 mb-6 border-2 border-gray-300 border-dashed rounded-lg mt-14">
           <h1 className="font-semibold text-2xl mb-2 lg:text-3xl">Dashboard</h1>
-          <p className="font-medium lg:text-lg">{`${page === 'tambah-pelanggan' ? `Selamat datang ${name}, siapa pelanggan yang ingin ditambah?`: 'Daftar pelanggan invoice.'}`}</p>
+          <p className="font-medium lg:text-lg">{`${page === 'tambah-pelanggan' ? `Selamat datang ${username}, siapa pelanggan yang ingin ditambah?`: 'Daftar pelanggan invoice.'}`}</p>
         </header>
         {children}
       </main>

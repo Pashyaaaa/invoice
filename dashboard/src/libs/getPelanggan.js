@@ -1,6 +1,6 @@
-import { daftarPelanggan } from "../../public/daftarPelanggan";
+import axios from "axios"
 
-export default function getPelanggan(id) {
-  const pelanggan = daftarPelanggan.filter(pelanggan => pelanggan.id == id)
-  return pelanggan
+export default async function getPelanggan(id) {
+  const response = await axios.get(`${import.meta.env.VITE_API_URL}/invoices/${id}`)
+  return response.data
 }

@@ -4,9 +4,10 @@ import {
   useLoaderData
 } from "react-router-dom"
 import getAllPelanggan from "../libs/getAllpelanggan"
+import { getFormatDate } from "/public/getFormatDate.js"
 
-export function loader() {
-  const pelanggan = getAllPelanggan()
+export async function loader() {
+  const pelanggan = await getAllPelanggan()
   return { pelanggan }
 }
 
@@ -83,7 +84,7 @@ export default function ListPelanggan() {
           </thead>
           <tbody>
             {pelanggan.map((item, i) => (
-              <tr key={item.nama} className="odd:bg-white even:bg-gray-50 border-b">
+              <tr key={item.id} className="odd:bg-white even:bg-gray-50 border-b">
                 <th
                   scope="row"
                   className="px-6 py-4 whitespace-nowrap font-medium text-gray-900"
@@ -94,43 +95,43 @@ export default function ListPelanggan() {
                   scope="row"
                   className="px-6 py-4 whitespace-nowrap font-medium text-gray-900"
                 >
-                  {item.tanggalPemesanan}
+                  {getFormatDate(item.createdAt)}
                 </th>
                 <td
                   scope="row"
                   className="px-6 py-4 whitespace-nowrap font-medium"
                 >
-                  {item.nama}
+                  {item.name}
                 </td>
                 <td
                   className="px-6 py-4 whitespace-nowrap"
                 >
-                  {item.alamat}
+                  {item.address}
                 </td>
                 <td
                   className="px-6 py-4 whitespace-nowrap"
                 >
-                  {item.noHP}
+                  {item.number}
                 </td>
                 <td
                   className="px-6 py-4 whitespace-nowrap"
                 >
-                  {item.tanggalCheckin}
+                  {getFormatDate(item.check_in)}
                 </td>
                 <td
                   className="px-6 py-4 whitespace-nowrap"
                 >
-                  {item.tanggalCheckout}
+                  {getFormatDate(item.check_out)}
                 </td>
                 <td
                   className="px-6 py-4 whitespace-nowrap"
                 >
-                  {`Rp ${item.totalPembayaran.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`}
+                  {`Rp ${item.total.replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`}
                 </td>
                 <td
                   className="px-6 py-4 whitespace-nowrap"
                 >
-                  {`Rp ${item.sisaBayarInvoice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`}
+                  {`Rp ${item.sisa_bayar.replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`}
                 </td>
                 <td className="flex items-center px-6 py-4 whitespace-nowrap">
                   <Link
