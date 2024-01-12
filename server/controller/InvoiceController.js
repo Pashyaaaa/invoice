@@ -25,7 +25,13 @@ export const getInvoice = async (req, res) => {
           where: {
             isDeleted: false,
           },
-          attributes: ["id", "bayar", "keterangan", "invoice_id"],
+          attributes: [
+            "id",
+            "bayar",
+            "keterangan",
+            "tanggal_bayar",
+            "invoice_id",
+          ],
         },
       ],
       where: {
@@ -61,7 +67,13 @@ export const getInvoiceById = async (req, res) => {
           where: {
             isDeleted: false,
           },
-          attributes: ["id", "bayar", "keterangan", "invoice_id"],
+          attributes: [
+            "id",
+            "bayar",
+            "keterangan",
+            "tanggal_bayar",
+            "invoice_id",
+          ],
         },
       ],
       where: {
@@ -76,13 +88,9 @@ export const getInvoiceById = async (req, res) => {
 };
 
 export const addInvoice = async (req, res) => {
-  const { name, number, address, day, check_in, check_out } = req.body;
+  const { name, number, address, day, check_in, check_out, total } = req.body;
 
   try {
-    const harga = 1000000;
-
-    const total = day * harga;
-
     await Invoice.create({
       name: name,
       number: number,
