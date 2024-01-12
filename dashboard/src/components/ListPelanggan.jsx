@@ -17,8 +17,8 @@ export default function ListPelanggan() {
   return (
     <>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-        <table className="text-sm text-left rtl:text-right text-gray-700">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+        <table className="text-sm text-left rtl:text-right text-gray-700 sm:text-base">
+          <thead className="text-xs text-gray-700 uppercase bg-gray-50 sm:text-sm">
             <tr>
               <th
                 scope="col"
@@ -131,17 +131,18 @@ export default function ListPelanggan() {
                 <td
                   className="px-6 py-4 whitespace-nowrap"
                 >
-                  <Link
-                    to={`/dashboard/riwayat-pembayaran/${item.id}`}
-                    className="transition-colors hover:text-blue-600"
-                  >
-                    {`Rp ${item.sisa_bayar.replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`}
-                  </Link>
+                  {item.sisa_bayar === "0" ? 'Lunas' : `Rp ${item.sisa_bayar.replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`}
                 </td>
                 <td className="flex items-center px-6 py-4 whitespace-nowrap">
                   <Link
-                    to={`/dashboard/daftar-pelanggan/bayar-invoice/${item.id}`}
+                    to={`/dashboard/riwayat-pembayaran/${item.id}`}
                     className="font-medium text-blue-600 hover:underline"
+                  >
+                    Lihat detail
+                  </Link>
+                  <Link
+                    to={`/dashboard/daftar-pelanggan/bayar-invoice/${item.id}`}
+                    className="font-medium text-blue-600 hover:underline ms-3"
                   >
                     Bayar
                   </Link>

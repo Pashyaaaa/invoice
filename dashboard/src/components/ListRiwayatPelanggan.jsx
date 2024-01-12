@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { useNavigate,useParams } from "react-router-dom"
 import axios from "axios"
-import { getFormatDate } from "../../public/getFormatDate"
+import { getFormatDate } from "/public/getFormatDate.js"
 
 export default function ListRiwayatPelanggan() {
   const { id } = useParams()
@@ -42,8 +42,8 @@ export default function ListRiwayatPelanggan() {
           <span>Kembali</span>
         </button>
       </div>
-      <table className="w-full text-sm text-left rtl:text-right text-gray-700">
-        <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+      <table className="w-full text-sm text-left rtl:text-right text-gray-700 sm:text-base">
+        <thead className="text-xs text-gray-700 uppercase bg-gray-50 sm:text-sm">
           <tr>
             <th
               scope="col"
@@ -84,29 +84,31 @@ export default function ListRiwayatPelanggan() {
           </tr>
         </thead>
         <tbody>
-          <tr className="bg-white border-bhover:bg-gray-100">
-            <td className="px-6 py-4 whitespace-nowrap">
-              1
-            </td>
-            <th
-              scope="row"
-              className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-            >
-              {pelanggan.createdAt}
-            </th>
-            <td className="px-6 py-4 whitespace-nowrap">
-              {`2024-01-11 (07:47)`}
-            </td>
-            <td className="px-6 py-4 whitespace-nowrap">
-              Rp {pelanggan.total}
-            </td>
-            <td className="px-6 py-4 whitespace-nowrap">
-              DP
-            </td>
-            <td className="px-6 py-4 whitespace-nowrap">
-              <a href="#" className="font-medium text-red-600 dark:text-red-500 hover:underline">Batal</a>
-            </td>
-          </tr>
+          {pelanggan.pembayaran && pelanggan.pembayaran.map(item => (
+            <tr key={item.id} className="bg-white border-bhover:bg-gray-100">
+              <td className="px-6 py-4 whitespace-nowrap">
+                1
+              </td>
+              <th
+                scope="row"
+                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+              >
+                {pelanggan.createdAt && getFormatDate(pelanggan.createdAt)}
+              </th>
+              <td className="px-6 py-4 whitespace-nowrap">
+                {item.tanggal_bayar && getFormatDate(item.tanggal_bayar)}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap">
+                Rp {item.bayar && item.bayar.replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap">
+                DP
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap">
+                <a href="#" className="font-medium text-red-600 dark:text-red-500 hover:underline">Batal</a>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>
