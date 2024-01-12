@@ -39,6 +39,7 @@ export default function FormPemesanan() {
     formData.append('day', durasi.toString()) // Mengirim durasi pemesanan
     formData.append('check_in', tanggalCheckin)
     formData.append('check_out', tanggalCheckout)
+    formData.append('total', totalPembayaran)
     
     try {
       await axios.post(`${import.meta.env.VITE_API_URL}/invoices`, formData, {
@@ -200,7 +201,7 @@ export default function FormPemesanan() {
                 selected={tanggalCheckin}
                 onChange={handleDateChange}
                 startDate={tanggalCheckin}
-                className='bg-gray-50 border border-gray-400 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 " placeholder="Select date end'
+                className='bg-gray-50 border border-gray-400 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5'
                 placeholderText="Checkin"
                 required
               />
@@ -231,7 +232,7 @@ export default function FormPemesanan() {
                 endDate={tanggalCheckout}
                 startDate={tanggalCheckin}
                 minDate={tanggalCheckin}
-                className='bg-gray-50 border border-gray-400 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 '
+                className='bg-gray-50 border border-gray-400 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5'
                 placeholderText="Checkout"
                 required
               />

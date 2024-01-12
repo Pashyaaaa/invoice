@@ -19,11 +19,7 @@ export default function ModalBayar() {
   const [bayarInvoice, setBayarInvoice] = useState(0)
   const [keteranganPembayaran, setKeteranganPembayaran] = useState('')
 
-  const handleInputClick = (e) => {
-    e.stopPropagation()
-  }
-
-  const handleInputFocus = (e) => {
+  const handleStopPropagation = (e) => {
     e.stopPropagation()
   }
 
@@ -128,8 +124,8 @@ export default function ModalBayar() {
                     className="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                     placeholder="Pasang nominal"
                     required
-                    onClick={handleInputClick}
-                    onFocus={handleInputFocus}
+                    onClick={handleStopPropagation}
+                    onFocus={handleStopPropagation}
                     value={bayarInvoice}
                     onChange={e => setBayarInvoice(e.target.value)}
                   />
@@ -148,8 +144,8 @@ export default function ModalBayar() {
                     className="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                     placeholder="Keterangan pembayaran"
                     required
-                    onClick={handleInputClick}
-                    onFocus={handleInputFocus}
+                    onClick={handleStopPropagation}
+                    onFocus={handleStopPropagation}
                     value={keteranganPembayaran}
                     onChange={e => setKeteranganPembayaran(e.target.value)}
                   />

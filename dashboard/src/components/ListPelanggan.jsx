@@ -17,8 +17,8 @@ export default function ListPelanggan() {
   return (
     <>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-        <table className="text-sm text-left rtl:text-right text-gray-600 lg:text-base">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-50 lg:text-base">
+        <table className="text-sm text-left rtl:text-right text-gray-700">
+          <thead className="text-xs text-gray-700 uppercase bg-gray-50">
             <tr>
               <th
                 scope="col"
@@ -131,7 +131,12 @@ export default function ListPelanggan() {
                 <td
                   className="px-6 py-4 whitespace-nowrap"
                 >
-                  {`Rp ${item.sisa_bayar.replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`}
+                  <Link
+                    to={`/dashboard/riwayat-pembayaran/${item.id}`}
+                    className="transition-colors hover:text-blue-600"
+                  >
+                    {`Rp ${item.sisa_bayar.replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`}
+                  </Link>
                 </td>
                 <td className="flex items-center px-6 py-4 whitespace-nowrap">
                   <Link

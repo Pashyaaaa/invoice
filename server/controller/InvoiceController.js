@@ -76,13 +76,9 @@ export const getInvoiceById = async (req, res) => {
 };
 
 export const addInvoice = async (req, res) => {
-  const { name, number, address, day, check_in, check_out } = req.body;
+  const { name, number, address, day, check_in, check_out, total } = req.body;
 
   try {
-    const harga = 1000000;
-
-    const total = day * harga;
-
     await Invoice.create({
       name: name,
       number: number,
