@@ -1,4 +1,3 @@
-import { where } from "sequelize";
 import db from "../models/index.js";
 const Invoice = db.models.invoice;
 const Pembayaran = db.models.pembayaran;
@@ -6,7 +5,7 @@ const Pembayaran = db.models.pembayaran;
 export const getPembayaran = async (req, res) => {
   try {
     const response = await Pembayaran.findAll({
-      attributes: ["id", "bayar", "keterangan", "invoice_id"],
+      attributes: ["id", "bayar", "keterangan", "tanggal_bayar", "invoice_id"],
       where: {
         isDeleted: false,
       },
@@ -35,7 +34,7 @@ export const getPembayaran = async (req, res) => {
 };
 
 export const addPembayaran = async (req, res) => {
-  const { bayar, keterangan, invoice_id } = req.body;
+  const { bayar, keterangan, tanggal_bayar, invoice_id } = req.body;
   try {
     // Mengambil data invoice berdasarkan ID
     const calInvoice = await Invoice.findOne({
@@ -53,7 +52,7 @@ export const addPembayaran = async (req, res) => {
     if (bayar > calInvoice.sisa_bayar) {
       return res.status(400).json({
         message:
-          "Pembayaran Tidak berhasil, Karena Membayar lebih dari yang ditagih",
+          "Pembayaran tidak berhasil, Karena mencoba membayar lebih dari yang ditagih",
       });
     }
 
@@ -61,6 +60,7 @@ export const addPembayaran = async (req, res) => {
     const pembayaran = await Pembayaran.create({
       bayar: bayar,
       keterangan: keterangan,
+      tanggal_bayar: tanggal_bayar,
       invoice_id: invoice_id,
     });
 

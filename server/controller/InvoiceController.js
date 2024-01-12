@@ -25,7 +25,13 @@ export const getInvoice = async (req, res) => {
           where: {
             isDeleted: false,
           },
-          attributes: ["id", "bayar", "keterangan", "invoice_id"],
+          attributes: [
+            "id",
+            "bayar",
+            "keterangan",
+            "tanggal_bayar",
+            "invoice_id",
+          ],
         },
       ],
       where: {
@@ -61,7 +67,13 @@ export const getInvoiceById = async (req, res) => {
           where: {
             isDeleted: false,
           },
-          attributes: ["id", "bayar", "keterangan", "invoice_id"],
+          attributes: [
+            "id",
+            "bayar",
+            "keterangan",
+            "tanggal_bayar",
+            "invoice_id",
+          ],
         },
       ],
       where: {
