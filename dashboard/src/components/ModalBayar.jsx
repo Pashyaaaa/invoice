@@ -18,12 +18,9 @@ export default function ModalBayar() {
 
   const [bayarInvoice, setBayarInvoice] = useState(0)
   const [keteranganPembayaran, setKeteranganPembayaran] = useState('')
+  const [tanggalBayarInvoice, setTanggalBayarInvoice] = useState('')
 
-  const handleInputClick = (e) => {
-    e.stopPropagation()
-  }
-
-  const handleInputFocus = (e) => {
+  const handleStopPropagation = (e) => {
     e.stopPropagation()
   }
 
@@ -33,6 +30,7 @@ export default function ModalBayar() {
     const formData = new FormData()
     formData.append('bayar', bayarInvoice)
     formData.append('keterangan', keteranganPembayaran)
+    formData.append('tanggal_bayar', tanggalBayarInvoice)
     formData.append('invoice_id', pelanggan.id)
 
     try {
@@ -47,6 +45,7 @@ export default function ModalBayar() {
 
     setBayarInvoice(0)
     setKeteranganPembayaran('')
+    setTanggalBayarInvoice('')
     navigate('/dashboard/daftar-pelanggan')
   }
 
@@ -57,7 +56,7 @@ export default function ModalBayar() {
     >
       <div
         className="absolute p-4 w-full max-w-md max-h-full"
-        onClick={e => e.stopPropagation()}
+        onClick={e => handleStopPropagation(e)}
       >
         <div className="relative bg-white rounded-lg shadow">
           <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t">
@@ -116,20 +115,49 @@ export default function ModalBayar() {
               <div className="pt-5">
                 <div className="mb-5">
                   <label
+                    htmlFor="tanggalBayar"
+                    className="block mb-2 text-sm font-medium text-gray-900"
+                  >
+                    Set Tanggal Bayar
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
+                      <svg
+                        className="w-4 h-4 text-gray-500 dark:text-gray-400"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                      </svg>
+                    </div>
+                    <input
+                      id="tanggalBayar"
+                      datepicker="true"
+                      type="datetime-local"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      placeholder="Pilih tanggal bayar"
+                      value={tanggalBayarInvoice}
+                      onChange={e => setTanggalBayarInvoice(e.target.value)}
+                    />
+                  </div>
+                </div>
+                <div className="mb-5">
+                  <label
                     htmlFor="bayarInvoice"
                     className="block mb-2 text-sm font-medium text-gray-900"
                   >
-                    Bayar Invoice
+                    Nominal
                   </label>
                   <input
                     type="number"
                     name="bayarInvoice"
                     id="bayarInvoice"
                     className="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                    placeholder="Pasang nominal"
+                    placeholder="Nominal"
                     required
-                    onClick={handleInputClick}
-                    onFocus={handleInputFocus}
+                    onClick={handleStopPropagation}
+                    onFocus={handleStopPropagation}
                     value={bayarInvoice}
                     onChange={e => setBayarInvoice(e.target.value)}
                   />
@@ -148,8 +176,8 @@ export default function ModalBayar() {
                     className="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                     placeholder="Keterangan pembayaran"
                     required
-                    onClick={handleInputClick}
-                    onFocus={handleInputFocus}
+                    onClick={handleStopPropagation}
+                    onFocus={handleStopPropagation}
                     value={keteranganPembayaran}
                     onChange={e => setKeteranganPembayaran(e.target.value)}
                   />

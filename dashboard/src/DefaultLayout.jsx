@@ -7,7 +7,8 @@ import { useState } from "react"
 import {
   useNavigate,
   Link,
-  NavLink
+  NavLink,
+  useLocation
 } from "react-router-dom"
 
 export default function DefaultLayout({ children, page }) {
@@ -16,6 +17,24 @@ export default function DefaultLayout({ children, page }) {
   const { name } = useRefreshToken()
   const username = name.charAt(0).toUpperCase() + name.slice(1)
   const navigate = useNavigate()
+
+  let location = useLocation()
+  let welcomeText
+
+  switch (location.pathname) {
+    case '/dashboard/daftar-pelanggan':
+      welcomeText = `Daftar pelanggan invoice.`
+      break;
+    case '/dashboard/riwayat-pembayaran':
+      welcomeText = `Riwayat pembayaran invoice`
+      break;
+    case '/':
+      welcomeText = `Selamat datang ${username}, siapa pelanggan yang ingin ditambah?`
+      break;
+    default:
+      welcomeText = ``
+      break;
+  }
 
   const handleOpenSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen)
@@ -103,10 +122,10 @@ export default function DefaultLayout({ children, page }) {
         </div>
       </aside>
 
-      <main className="p-4 sm:ml-64">
+      <main className="p-4 sm:ml-64 h-[2000px]">
         <header className="p-4 mb-6 border-2 border-gray-300 border-dashed rounded-lg mt-14">
           <h1 className="font-semibold text-2xl mb-2 lg:text-3xl">Dashboard</h1>
-          <p className="font-medium lg:text-lg">{`${page === 'tambah-pelanggan' ? `Selamat datang ${username}, siapa pelanggan yang ingin ditambah?`: 'Daftar pelanggan invoice.'}`}</p>
+          <p className="font-medium lg:text-lg">{welcomeText}</p>
         </header>
         {children}
       </main>
