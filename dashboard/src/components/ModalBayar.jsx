@@ -56,7 +56,7 @@ export default function ModalBayar() {
     >
       <div
         className="absolute p-4 w-full max-w-md max-h-full"
-        onClick={e => e.stopPropagation()}
+        onClick={e => handleStopPropagation(e)}
       >
         <div className="relative bg-white rounded-lg shadow">
           <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t">

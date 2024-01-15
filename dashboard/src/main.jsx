@@ -13,6 +13,8 @@ import DaftarPelangganPage from "./pages/DaftarPelangganPage.jsx"
 import RiwayatPembayaranPage from "./pages/RiwayatPembayaranPage.jsx"
 import ModalBayar, { loader as modalLoader } from "./components/ModalBayar.jsx"
 import { loader as rootLoader } from "./components/ListPelanggan.jsx"
+import ModalUbahInvoice, { loader as modalUbahLoader } from "./components/ModalUbahInvoice.jsx"
+import PopUpAlert, { loader as popUpAlertLoader } from "./components/PopUpAlert.jsx"
 
 axios.defaults.withCredentials = true
 
@@ -38,7 +40,17 @@ const router = createBrowserRouter([
         path: "/dashboard/daftar-pelanggan/bayar-invoice/:id",
         element: <ModalBayar />,
         loader: modalLoader
-      }
+      },
+      {
+        path: "/dashboard/daftar-pelanggan/ubah-invoice/:id",
+        element: <ModalUbahInvoice />,
+        loader: modalUbahLoader
+      },
+      {
+        path: "/dashboard/daftar-pelanggan/hapus-invoice/:id",
+        element: <PopUpAlert />,
+        loader: popUpAlertLoader
+      },
     ]
   },
   {

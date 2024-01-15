@@ -14,6 +14,8 @@ export async function loader() {
 export default function ListPelanggan() {
   const { pelanggan } = useLoaderData()
 
+  const sortedPelanggan = pelanggan.toReversed()
+
   return (
     <>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -83,7 +85,7 @@ export default function ListPelanggan() {
             </tr>
           </thead>
           <tbody>
-            {pelanggan.map((item, i) => (
+            {sortedPelanggan.map((item, i) => (
               <tr key={item.id} className="odd:bg-white even:bg-gray-50 border-b">
                 <th
                   scope="row"
@@ -138,25 +140,36 @@ export default function ListPelanggan() {
                     to={`/dashboard/riwayat-pembayaran/${item.id}`}
                     className="font-medium text-blue-600 hover:underline"
                   >
-                    Lihat detail
+                    <svg className="w-4 h-4 text-blue-600 hover:underline" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 14">
+                      <g stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2">
+                        <path d="M10 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
+                        <path d="M10 13c4.97 0 9-2.686 9-6s-4.03-6-9-6-9 2.686-9 6 4.03 6 9 6Z"/>
+                      </g>
+                    </svg>
                   </Link>
                   <Link
                     to={`/dashboard/daftar-pelanggan/bayar-invoice/${item.id}`}
-                    className="font-medium text-blue-600 hover:underline ms-3"
+                    className="font-medium ms-4"
                   >
-                    Bayar
+                    <svg className="w-4 h-4 text-blue-600 hover:underline" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                      <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 2a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1M2 5h12a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Zm8 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z"/>
+                    </svg>
                   </Link>
                   <Link
-                    to={''}
-                    className="font-medium text-green-600 hover:underline ms-3"
+                    to={`/dashboard/daftar-pelanggan/ubah-invoice/${item.id}`}
+                    className="font-medium ms-4"
                   >
-                    Ubah
+                    <svg className="w-4 h-4 text-green-600 hover:underline" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 18">
+                      <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.109 17H1v-2a4 4 0 0 1 4-4h.87M10 4.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Zm7.95 2.55a2 2 0 0 1 0 2.829l-6.364 6.364-3.536.707.707-3.536 6.364-6.364a2 2 0 0 1 2.829 0Z"/>
+                    </svg>
                   </Link>
                   <Link
-                    to={''}
-                    className="font-medium text-red-600 hover:underline ms-3"
+                    to={`/dashboard/daftar-pelanggan/hapus-invoice/${item.id}`}
+                    className="font-medium ms-4"
                   >
-                    Batal
+                    <svg className="w-4 h-4 text-red-600 hover:underline" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 20">
+                      <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 5h16M7 8v8m4-8v8M7 1h4a1 1 0 0 1 1 1v3H6V2a1 1 0 0 1 1-1ZM3 5h12v13a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5Z"/>
+                    </svg>
                   </Link>
                 </td>
               </tr>
