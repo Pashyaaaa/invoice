@@ -50,7 +50,6 @@ export default function FormPemesanan() {
       setIsAlert(true)
       setErrorAlert(false)
       setTextAlert('Sukses! Pelanggan berhasil ditambahkan.')
-      console.log(tanggalCheckin)
     } catch (error) {
       setIsAlert(true)
       setErrorAlert(true)

@@ -84,33 +84,49 @@ export default function ListRiwayatPelanggan() {
           </tr>
         </thead>
         <tbody>
-          {pelanggan.pembayaran && pelanggan.pembayaran.map(item => (
-            <tr key={item.id} className="bg-white border-bhover:bg-gray-100">
-              <td className="px-6 py-4 whitespace-nowrap">
-                1
-              </td>
-              <th
-                scope="row"
-                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-              >
-                {pelanggan.createdAt && getFormatDate(pelanggan.createdAt)}
-              </th>
-              <td className="px-6 py-4 whitespace-nowrap">
-                {item.tanggal_bayar && getFormatDate(item.tanggal_bayar)}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap">
-                Rp {item.bayar && item.bayar.replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap">
-                DP
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap">
-                <a href="#" className="font-medium text-red-600 dark:text-red-500 hover:underline">Batal</a>
-              </td>
-            </tr>
-          ))}
+          <ListPembayaran pelanggan={pelanggan} />
         </tbody>
       </table>
     </div>
   )
+}
+
+function ListPembayaran({ pelanggan }) {
+  const component = pelanggan.pembayaran && pelanggan.pembayaran.length > 0 ? (pelanggan.pembayaran.map(item => (
+      <tr key={item.id} className="bg-white border-bhover:bg-gray-100">
+        <td className="px-6 py-4 whitespace-nowrap">
+          1
+        </td>
+        <th
+          scope="row"
+          className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+        >
+          {pelanggan.createdAt && getFormatDate(pelanggan.createdAt)}
+        </th>
+        <td className="px-6 py-4 whitespace-nowrap">
+          {item.tanggal_bayar && getFormatDate(item.tanggal_bayar)}
+        </td>
+        <td className="px-6 py-4 whitespace-nowrap">
+          Rp {item.bayar && item.bayar.replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
+        </td>
+        <td className="px-6 py-4 whitespace-nowrap">
+          DP
+        </td>
+        <td className="px-6 py-4 whitespace-nowrap">
+          <a href="#" className="font-medium text-red-600 dark:text-red-500 hover:underline">Batal</a>
+        </td>
+      </tr>
+    ))
+  ) : (
+    <tr>
+      <td
+        colSpan="6"
+        className="px-6 py-4 font-semibold text-lg text-center"
+      >
+        Belum ada pembayaran
+      </td>
+    </tr>
+  )
+
+  return component
 }
