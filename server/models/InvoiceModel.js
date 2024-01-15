@@ -12,10 +12,7 @@ const Invoice = {
   },
   check_out: DataTypes.DATE,
   total: DataTypes.STRING,
-  sisa_bayar: {
-    type: DataTypes.STRING,
-    defaultValue: 0,
-  },
+  sisa_bayar: DataTypes.STRING,
   createdAt: {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW,

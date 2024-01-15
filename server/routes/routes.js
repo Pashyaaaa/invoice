@@ -12,9 +12,12 @@ import {
   deleteInvoice,
   getInvoice,
   getInvoiceById,
+  updateInvoice,
 } from "../controller/InvoiceController.js";
 import {
   addPembayaran,
+  cetakPembayaran,
+  deletePembayaran,
   getPembayaran,
 } from "../controller/PembayaranController.js";
 const router = express.Router();
@@ -30,10 +33,15 @@ router.get("/token", refreshToken);
 router.get("/invoices", getInvoice);
 router.get("/invoices/:id", getInvoiceById);
 router.post("/invoices", addInvoice);
+router.patch("/invoices/:id", updateInvoice);
 router.delete("/invoices/:id", deleteInvoice);
 
 // Pembayaran
 router.get("/pembayaran", getPembayaran);
 router.post("/pembayaran", addPembayaran);
+router.delete("/pembayaran/:id", deletePembayaran);
+router.get("/cetakPembayaran/:id", cetakPembayaran);
+
+// next:
 
 export default router;

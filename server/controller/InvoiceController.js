@@ -111,6 +111,39 @@ export const addInvoice = async (req, res) => {
   }
 };
 
+export const updateInvoice = async (req, res) => {
+  const invoice = await Invoice.findOne({
+    where: {
+      id: req.params.id,
+    },
+  });
+  if (!invoice) {
+    return res.status(404).json({ message: "No Data Found" });
+  }
+  const { name, number, address, day, check_in, check_out, total } = req.body;
+  try {
+    await Invoice.update(
+      {
+        name: name,
+        number: number,
+        address: address,
+        day: day,
+        check_in: check_in,
+        check_out: check_out,
+        total: total,
+      },
+      {
+        where: {
+          id: req.params.id,
+        },
+      }
+    );
+    res.status(200).json({ message: "Data Invoice/Tagihan Telah diupdate" });
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
 export const deleteInvoice = async (req, res) => {
   const invoice = await Invoice.findOne({
     where: {
