@@ -27,20 +27,20 @@ export default function ModalBayar() {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    const formData = new FormData()
-    formData.append('bayar', bayarInvoice)
-    formData.append('keterangan', keteranganPembayaran)
-    formData.append('tanggal_bayar', tanggalBayarInvoice)
-    formData.append('invoice_id', pelanggan.id)
-
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL}/pembayaran`, formData, {
+      await axios.post(`${import.meta.env.VITE_API_URL}/pembayaran`, {
+        bayar: parseInt(bayarInvoice, 10),
+        keterangan: keteranganPembayaran,
+        tanggal_bayar: tanggalBayarInvoice,
+        invoice_id: pelanggan.id,
+      }, {
         headers: {
-          "Content-type": "application/json"
-        }
-      })
+          "Content-type": "application/json",
+        },
+      });
     } catch (error) {
-      console.log(error)
+      console.log('Error:', error.message);
+      console.log('Response data:', error.response?.data);
     }
 
     setBayarInvoice(0)
