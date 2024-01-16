@@ -1,6 +1,6 @@
 import getPelanggan from "../libs/getPelanggan"
 import axios from "axios"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { getFormatDate } from "/public/getFormatDate.js"
 import {
   useLoaderData,
@@ -37,17 +37,25 @@ export default function ModalBayar() {
         headers: {
           "Content-type": "application/json",
         },
-      });
+      })
+      console.log(keteranganPembayaran)
     } catch (error) {
-      console.log('Error:', error.message);
-      console.log('Response data:', error.response?.data);
+      console.log('Error:', error.message)
+      console.log('Response data:', error.response?.data)
     }
 
     setBayarInvoice(0)
     setKeteranganPembayaran('')
     setTanggalBayarInvoice('')
-    navigate('/dashboard/daftar-pelanggan')
+    navigate(`/dashboard/daftar-pelanggan?refresh=${Date.now()}`)
   }
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    if (params.get("refresh")) {
+      window.location.reload()
+    }
+  }, [])
 
   return (
     <div

@@ -113,7 +113,7 @@ function ListPembayaran({ pelanggan }) {
           Rp {item.bayar && item.bayar.replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
-          DP
+          {item.keterangan && item.keterangan}
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
           <Link to={`/dashboard/riwayat-pembayaran/${pelanggan.id}/${item.id}`} className="font-medium text-red-600 dark:text-red-500 hover:underline">Batal</Link>

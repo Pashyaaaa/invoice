@@ -131,6 +131,7 @@ export const updateInvoice = async (req, res) => {
         check_in: check_in,
         check_out: check_out,
         total: total,
+        sisa_bayar: total
       },
       {
         where: {

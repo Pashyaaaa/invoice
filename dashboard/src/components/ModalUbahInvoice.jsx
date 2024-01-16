@@ -23,16 +23,8 @@ export default function ModalUbahInvoice() {
   const [alamat, setAlamat] = useState(pelanggan.address)
   const [noHP, setNoHP] = useState(pelanggan.number)
   const [durasi, setDurasi] = useState(0)
-  const [tanggalCheckin, setTanggalCheckin] = useState(() => {
-    // Set tanggal default dengan zona waktu Asia/Jakarta dan jam 13:00:00
-    const defaultDate = set(new Date(), { hours: 13, minutes: 0, seconds: 0, milliseconds: 0 });
-    return utcToZonedTime(defaultDate, 'Asia/Jakarta');
-  })
-  const [tanggalCheckout, setTanggalCheckout] = useState(() => {
-    // Set tanggal default dengan zona waktu Asia/Jakarta dan jam 13:00:00
-    const defaultDate = set(new Date(), { hours: 13, minutes: 0, seconds: 0, milliseconds: 0 });
-    return utcToZonedTime(defaultDate, 'Asia/Jakarta');
-  })
+  const [tanggalCheckin, setTanggalCheckin] = useState(new Date())
+  const [tanggalCheckout, setTanggalCheckout] = useState(new Date())
   const [totalPembayaran, setTotalPembayaran] = useState(pelanggan.total)
 
   const handleDateChange = (date) => {
@@ -60,7 +52,6 @@ export default function ModalUbahInvoice() {
           "Content-type": "application/json",
         },
       })
-      navigate('/dashboard/daftar-pelanggan')
     } catch (error) {
       console.log(error.response.data.message)
     }
@@ -80,6 +71,7 @@ export default function ModalUbahInvoice() {
     })
     setTotalPembayaran(0)
     setDurasi(0)
+    navigate(`/dashboard/daftar-pelanggan?refresh=${Date.now()}`)
   }
 
   useEffect(() => {
@@ -88,6 +80,11 @@ export default function ModalUbahInvoice() {
       const diffInTime = tanggalCheckout.getTime() - tanggalCheckin.getTime()
       const diffInDays = Math.ceil(diffInTime / (1000 * 60 * 60 * 24))
       setDurasi(diffInDays)
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("refresh")) {
+      window.location.reload();
     }
   }, [tanggalCheckin, tanggalCheckout])
 
@@ -207,7 +204,6 @@ export default function ModalUbahInvoice() {
                     startDate={tanggalCheckin}
                     className='bg-gray-50 border border-gray-400 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5'
                     placeholderText="Checkin"
-                    required
                   />
                 </div>
                 <span className="mx-4 text-gray-500">ke</span>
@@ -238,7 +234,6 @@ export default function ModalUbahInvoice() {
                     minDate={tanggalCheckin}
                     className='bg-gray-50 border border-gray-400 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5'
                     placeholderText="Checkout"
-                    required
                   />
                 </div>
               </div>

@@ -1,5 +1,6 @@
 import getPelanggan from "../libs/getPelanggan"
 import axios from "axios"
+import { useEffect } from "react"
 import {
   useNavigate,
   useLoaderData
@@ -21,11 +22,18 @@ export default function PopUpAlert() {
   const handleDeleteInvoice = async () => {
     try {
       await axios.delete(`${import.meta.env.VITE_API_URL}/invoices/${pelanggan.id}`)
-      navigate(-1)
+      navigate(`/dashboard/daftar-pelanggan?refresh=${Date.now()}`)
     } catch (error) {
       console.log(error)
     }
   }
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    if (params.get("refresh")) {
+      window.location.reload()
+    }
+  }, [])
 
   return (
     <div
