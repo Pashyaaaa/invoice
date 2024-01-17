@@ -93,7 +93,9 @@ export const cetakPembayaran = async (req, res) => {
     const pembayaran = await Pembayaran.findByPk(id);
 
     if (!pembayaran) {
-      return res.status(404).json({ error: "pembayaran not found" });
+      return res
+        .status(404)
+        .json({ error: "Riwayat Pembayaran Tidak Ditemukan" });
     }
 
     const angkaRandom = Math.round(Math.random() * 9999);
@@ -110,19 +112,26 @@ export const cetakPembayaran = async (req, res) => {
 
     doc.pipe(stream);
 
-    const namaWebsite = "Invoice Website";
+    const judul = "Riwayat Pembayaran";
     const fontBold = "Helvetica-Bold";
     const fontItalic = "Helvetica-Oblique";
 
-    doc.font(fontBold).fontSize(20).text(namaWebsite, {
+    doc.font(fontBold).fontSize(20).text(judul, {
       align: "center",
     });
     doc.moveDown();
 
-    doc.text(`pembayaran ID: ${pembayaran.id}`);
-    doc.text(`Amount: ${pembayaran.bayar}`);
+    doc.text(
+      `Nominal: Rp${pembayaran.bayar.replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`
+    );
     doc.text(`Tanggal Bayar: ${pembayaran.tanggal_bayar}`);
-    doc.text(`Keterangan: ${pembayaran.keterangan}`);
+    doc.text(`Keterangan: ${pembayaran.keterangan}`).moveDown(15);
+
+    doc.text("TTD. Penjual", {
+      columns: 3,
+      columnGap: 15,
+      align: "right",
+    });
 
     doc.end();
     stream.on("finish", () => {

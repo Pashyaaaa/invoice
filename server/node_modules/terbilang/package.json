@@ -1,0 +1,27 @@
+{
+  "name": "terbilang",
+  "version": "0.0.3",
+  "description": "JavaScript library to convert a number to its word representation in Bahasa Indonesia language",
+  "main": "index.js",
+  "scripts": {
+    "test": "phantomjs test/vendor/runner.js test/index.html?noglobals=true"
+  },
+  "author": "Hengki Sihombing",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:aredo/terbilang.git"
+  },
+  "keywords": [
+    "polish",
+    "number",
+    "words"
+  ],
+  "bugs": {
+    "url": "https://github.com/aredo/terbilang/issues"
+  },
+  "homepage": "https://github.com/aredo/terbilang/issues",
+  "devDependencies": {
+    "phantomjs": "^1.9.7-5"
+  }
+}

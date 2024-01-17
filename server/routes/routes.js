@@ -9,6 +9,7 @@ import { verifyToken } from "../middleware/VerifyToken.js";
 import { refreshToken } from "../controller/RefreshToken.js";
 import {
   addInvoice,
+  cetakInvoice,
   deleteInvoice,
   getInvoice,
   getInvoiceById,
@@ -35,6 +36,7 @@ router.get("/invoices/:id", getInvoiceById);
 router.post("/invoices", addInvoice);
 router.patch("/invoices/:id", updateInvoice);
 router.delete("/invoices/:id", deleteInvoice);
+router.get("/cetakInvoice/:id", cetakInvoice);
 
 // Pembayaran
 router.get("/pembayaran", getPembayaran);
