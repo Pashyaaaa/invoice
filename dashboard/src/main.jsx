@@ -15,6 +15,7 @@ import ModalBayar, { loader as modalLoader } from "./components/ModalBayar.jsx"
 import { loader as rootLoader } from "./components/ListPelanggan.jsx"
 import ModalUbahInvoice, { loader as modalUbahLoader } from "./components/ModalUbahInvoice.jsx"
 import PopUpAlert, { loader as popUpAlertLoader } from "./components/PopUpAlert.jsx"
+import PopUpAlertPembayaran from "./components/PopUpAlertPembayaran.jsx"
 
 axios.defaults.withCredentials = true
 
@@ -55,7 +56,13 @@ const router = createBrowserRouter([
   },
   {
     path: "/dashboard/riwayat-pembayaran/:id",
-    element: <RiwayatPembayaranPage />
+    element: <RiwayatPembayaranPage />,
+    children: [
+      {
+        path: "/dashboard/riwayat-pembayaran/:id/:pembayaran_id",
+        element: <PopUpAlertPembayaran />
+      }
+    ]
   }
 ])
 

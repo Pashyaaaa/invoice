@@ -1,19 +1,12 @@
-import getPelanggan from "../libs/getPelanggan"
 import axios from "axios"
-import { useEffect } from "react"
 import {
   useNavigate,
-  useLoaderData
+  useParams
 } from "react-router-dom"
 
-export async function loader({ params }) {
-  const pelanggan = await getPelanggan(params.id)
-  return { pelanggan }
-}
-
-export default function PopUpAlert() {
-  const { pelanggan } = useLoaderData()
+export default function PopUpAlertPembayaran() {
   const navigate = useNavigate()
+  const { pembayaran_id } = useParams()
 
   const handleStopPropagation = (e) => {
     e.stopPropagation()
@@ -21,19 +14,12 @@ export default function PopUpAlert() {
 
   const handleDeleteInvoice = async () => {
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL}/invoices/${pelanggan.id}`)
-      navigate(`/dashboard/daftar-pelanggan?refresh=${Date.now()}`)
+      await axios.delete(`${import.meta.env.VITE_API_URL}/pembayaran/${pembayaran_id}`)
+      navigate(-1)
     } catch (error) {
       console.log(error)
     }
   }
-
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search)
-    if (params.get("refresh")) {
-      window.location.reload()
-    }
-  }, [])
 
   return (
     <div
@@ -82,7 +68,7 @@ export default function PopUpAlert() {
                 d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
               />
             </svg>
-            <h3 className="mb-5 text-lg font-normal text-gray-500">Apakan Anda yakin ingin menghapus pelanggan ini?</h3>
+            <h3 className="mb-5 text-lg font-normal text-gray-500">Apakan Anda yakin ingin menghapus bukti pembayaran ini?</h3>
             <button
               type="button"
               className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center me-2"

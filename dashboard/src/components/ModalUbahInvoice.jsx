@@ -1,10 +1,14 @@
 import axios from "axios"
 import getPelanggan from "../libs/getPelanggan"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import {
   useNavigate,
   useLoaderData
 } from "react-router-dom"
+import DatePicker from "react-datepicker"
+import "react-datepicker/dist/react-datepicker.css"
+import { set, format } from "date-fns";
+import { utcToZonedTime } from "date-fns-tz";
 
 export async function loader({ params }) {
   const pelanggan = await getPelanggan(params.id)
@@ -18,24 +22,71 @@ export default function ModalUbahInvoice() {
   const [nama, setNama] = useState(pelanggan.name)
   const [alamat, setAlamat] = useState(pelanggan.address)
   const [noHP, setNoHP] = useState(pelanggan.number)
-  const [tanggalCheckin, setTanggalCheckin] = useState('')
-  const [tanggalCheckout, setTanggalCheckout] = useState('')
+  const [durasi, setDurasi] = useState(0)
+  const [tanggalCheckin, setTanggalCheckin] = useState(new Date())
+  const [tanggalCheckout, setTanggalCheckout] = useState(new Date())
   const [totalPembayaran, setTotalPembayaran] = useState(pelanggan.total)
+
+  const handleDateChange = (date) => {
+    setTanggalCheckin(date);
+  };
 
   const handleStopPropagation = (e) => {
     e.stopPropagation()
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
+
+    try {
+      await axios.patch(`${import.meta.env.VITE_API_URL}/invoices/${pelanggan.id}`, {
+        name: nama,
+        number: noHP,
+        address: alamat,
+        day: durasi.toString(),
+        check_in: tanggalCheckin,
+        check_out: tanggalCheckout,
+        total: totalPembayaran
+      },{
+        headers: {
+          "Content-type": "application/json",
+        },
+      })
+    } catch (error) {
+      console.log(error.response.data.message)
+    }
 
     setNama('')
     setNoHP('')
     setAlamat('')
-    setTanggalCheckin('')
-    setTanggalCheckout('')
+    setTanggalCheckin(() => {
+      // Set tanggal default dengan zona waktu Asia/Jakarta dan jam 13:00:00
+      const defaultDate = set(new Date(), { hours: 13, minutes: 0, seconds: 0, milliseconds: 0 });
+      return utcToZonedTime(defaultDate, 'Asia/Jakarta');
+    })
+    setTanggalCheckout(() => {
+      // Set tanggal default dengan zona waktu Asia/Jakarta dan jam 13:00:00
+      const defaultDate = set(new Date(), { hours: 13, minutes: 0, seconds: 0, milliseconds: 0 });
+      return utcToZonedTime(defaultDate, 'Asia/Jakarta');
+    })
     setTotalPembayaran(0)
+    setDurasi(0)
+    navigate(`/dashboard/daftar-pelanggan?refresh=${Date.now()}`)
   }
+
+  useEffect(() => {
+    // Menghitung durasi saat terjadi perubahan pada tanggalCheckin atau tanggalCheckout
+    if (tanggalCheckin && tanggalCheckout) {
+      const diffInTime = tanggalCheckout.getTime() - tanggalCheckin.getTime()
+      const diffInDays = Math.ceil(diffInTime / (1000 * 60 * 60 * 24))
+      setDurasi(diffInDays)
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("refresh")) {
+      window.location.reload();
+    }
+  }, [tanggalCheckin, tanggalCheckout])
 
   return (
     <div
@@ -44,7 +95,7 @@ export default function ModalUbahInvoice() {
     >
       <div
         className="absolute p-4 w-full max-w-md max-h-full"
-        onClick={e => e.stopPropagation()}
+        onClick={e => handleStopPropagation(e)}
       >
         <div className="relative bg-white rounded-lg shadow">
           <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t">
@@ -122,22 +173,70 @@ export default function ModalUbahInvoice() {
                 />
               </div>
               <div className="mb-5">
-                <span className="block mb-2 font-medium text-sm text-gray-900">Tanggal Checkin & Checkout :</span>
-                <div className="flex items-center">
-                  <input
-                    type='datetime-local'
-                    className="bg-gray-100 border border-gray-400 font-medium text-gray-900 text-sm rounded-lg block w-full p-2.5"
+              <label
+                htmlFor="alamat"
+                className="block mb-2 font-medium text-gray-900">
+                Tanggal Booking & Checkout
+              </label>
+              <div className="flex items-center">
+                <div className="relative">
+                  <div className="absolute z-10 inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                    <svg 
+                      className="w-4 h-4 text-gray-500"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                    </svg>
+                  </div>
+                  <DatePicker
+                    showTimeSelect
+                    timeFormat="HH:mm"
+                    timeIntervals={15}
+                    dateFormat="yyyy-MM-dd HH:mm"
+                    timeCaption="Time"
+                    timeZone="Asia/Jakarta"
+                    selectsStart
                     value={tanggalCheckin}
-                    onChange={e => setTanggalCheckin(e.target.value)}
-                  />
-                  <span className="mx-4 text-gray-500">ke</span>
-                  <input
-                    type='datetime-local'
-                    className="bg-gray-100 border border-gray-400 font-medium text-gray-900 text-sm rounded-lg block w-full p-2.5"
-                    value={tanggalCheckout}
-                    onChange={e => setTanggalCheckout(e.target.value)}
+                    selected={tanggalCheckin}
+                    onChange={handleDateChange}
+                    startDate={tanggalCheckin}
+                    className='bg-gray-50 border border-gray-400 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5'
+                    placeholderText="Checkin"
                   />
                 </div>
+                <span className="mx-4 text-gray-500">ke</span>
+                <div className="relative">
+                  <div className="absolute z-10 inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                    <svg
+                      className="w-4 h-4 text-gray-500"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                    </svg>
+                  </div>
+                  <DatePicker
+                    showTimeSelect
+                    timeFormat="HH:mm"
+                    timeIntervals={15}
+                    dateFormat="yyyy-MM-dd HH:mm"
+                    timeCaption="Time"
+                    timeZone="Asia/Jakarta"
+                    selectsEnd
+                    value={tanggalCheckout}
+                    selected={tanggalCheckout}
+                    onChange={date => setTanggalCheckout(date)}
+                    endDate={tanggalCheckout}
+                    startDate={tanggalCheckin}
+                    minDate={tanggalCheckin}
+                    className='bg-gray-50 border border-gray-400 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5'
+                    placeholderText="Checkout"
+                  />
+                </div>
+              </div>
               </div>
               <div className="mb-5">
                 <label

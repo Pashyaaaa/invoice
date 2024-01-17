@@ -1,6 +1,6 @@
 import getPelanggan from "../libs/getPelanggan"
 import axios from "axios"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { getFormatDate } from "/public/getFormatDate.js"
 import {
   useLoaderData,
@@ -27,27 +27,35 @@ export default function ModalBayar() {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    const formData = new FormData()
-    formData.append('bayar', bayarInvoice)
-    formData.append('keterangan', keteranganPembayaran)
-    formData.append('tanggal_bayar', tanggalBayarInvoice)
-    formData.append('invoice_id', pelanggan.id)
-
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL}/pembayaran`, formData, {
+      await axios.post(`${import.meta.env.VITE_API_URL}/pembayaran`, {
+        bayar: parseInt(bayarInvoice, 10),
+        keterangan: keteranganPembayaran,
+        tanggal_bayar: tanggalBayarInvoice,
+        invoice_id: pelanggan.id,
+      }, {
         headers: {
-          "Content-type": "application/json"
-        }
+          "Content-type": "application/json",
+        },
       })
+      console.log(keteranganPembayaran)
     } catch (error) {
-      console.log(error)
+      console.log('Error:', error.message)
+      console.log('Response data:', error.response?.data)
     }
 
     setBayarInvoice(0)
     setKeteranganPembayaran('')
     setTanggalBayarInvoice('')
-    navigate('/dashboard/daftar-pelanggan')
+    navigate(`/dashboard/daftar-pelanggan?refresh=${Date.now()}`)
   }
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    if (params.get("refresh")) {
+      window.location.reload()
+    }
+  }, [])
 
   return (
     <div
