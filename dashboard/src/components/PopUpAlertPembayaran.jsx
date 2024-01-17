@@ -6,7 +6,7 @@ import {
 
 export default function PopUpAlertPembayaran() {
   const navigate = useNavigate()
-  const { pembayaran_id } = useParams()
+  const { pembayaran_id, id } = useParams()
 
   const handleStopPropagation = (e) => {
     e.stopPropagation()
@@ -15,7 +15,8 @@ export default function PopUpAlertPembayaran() {
   const handleDeleteInvoice = async () => {
     try {
       await axios.delete(`${import.meta.env.VITE_API_URL}/pembayaran/${pembayaran_id}`)
-      navigate(-1)
+      navigate(`/dashboard/riwayat-pembayaran/${id}`)
+      window.location.reload()
     } catch (error) {
       console.log(error)
     }

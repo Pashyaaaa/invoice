@@ -5,9 +5,7 @@ import {
   useNavigate,
   useLoaderData
 } from "react-router-dom"
-import DatePicker from "react-datepicker"
-import "react-datepicker/dist/react-datepicker.css"
-import { set, format } from "date-fns";
+import { set } from "date-fns";
 import { utcToZonedTime } from "date-fns-tz";
 
 export async function loader({ params }) {
@@ -23,13 +21,9 @@ export default function ModalUbahInvoice() {
   const [alamat, setAlamat] = useState(pelanggan.address)
   const [noHP, setNoHP] = useState(pelanggan.number)
   const [durasi, setDurasi] = useState(0)
-  const [tanggalCheckin, setTanggalCheckin] = useState(new Date())
-  const [tanggalCheckout, setTanggalCheckout] = useState(new Date())
+  const [tanggalCheckin, setTanggalCheckin] = useState()
+  const [tanggalCheckout, setTanggalCheckout] = useState()
   const [totalPembayaran, setTotalPembayaran] = useState(pelanggan.total)
-
-  const handleDateChange = (date) => {
-    setTanggalCheckin(date);
-  };
 
   const handleStopPropagation = (e) => {
     e.stopPropagation()
@@ -173,44 +167,16 @@ export default function ModalUbahInvoice() {
                 />
               </div>
               <div className="mb-5">
-              <label
-                htmlFor="alamat"
-                className="block mb-2 font-medium text-gray-900">
-                Tanggal Booking & Checkout
-              </label>
-              <div className="flex items-center">
+                <label
+                  htmlFor="tanggalBayar"
+                  className="block mb-2 text-sm font-medium text-gray-900"
+                >
+                  Tanggal Checkin
+                </label>
                 <div className="relative">
-                  <div className="absolute z-10 inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                    <svg 
-                      className="w-4 h-4 text-gray-500"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
-                    </svg>
-                  </div>
-                  <DatePicker
-                    showTimeSelect
-                    timeFormat="HH:mm"
-                    timeIntervals={15}
-                    dateFormat="yyyy-MM-dd HH:mm"
-                    timeCaption="Time"
-                    timeZone="Asia/Jakarta"
-                    selectsStart
-                    value={tanggalCheckin}
-                    selected={tanggalCheckin}
-                    onChange={handleDateChange}
-                    startDate={tanggalCheckin}
-                    className='bg-gray-50 border border-gray-400 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5'
-                    placeholderText="Checkin"
-                  />
-                </div>
-                <span className="mx-4 text-gray-500">ke</span>
-                <div className="relative">
-                  <div className="absolute z-10 inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                  <div className="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
                     <svg
-                      className="w-4 h-4 text-gray-500"
+                      className="w-4 h-4 text-gray-500 dark:text-gray-400"
                       xmlns="http://www.w3.org/2000/svg"
                       fill="currentColor"
                       viewBox="0 0 20 20"
@@ -218,25 +184,45 @@ export default function ModalUbahInvoice() {
                       <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
                     </svg>
                   </div>
-                  <DatePicker
-                    showTimeSelect
-                    timeFormat="HH:mm"
-                    timeIntervals={15}
-                    dateFormat="yyyy-MM-dd HH:mm"
-                    timeCaption="Time"
-                    timeZone="Asia/Jakarta"
-                    selectsEnd
-                    value={tanggalCheckout}
-                    selected={tanggalCheckout}
-                    onChange={date => setTanggalCheckout(date)}
-                    endDate={tanggalCheckout}
-                    startDate={tanggalCheckin}
-                    minDate={tanggalCheckin}
-                    className='bg-gray-50 border border-gray-400 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5'
-                    placeholderText="Checkout"
+                  <input
+                    id="tanggalBayar"
+                    datepicker="true"
+                    type="datetime-local"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="Pilih tanggal bayar"
+                    value={tanggalCheckin}
+                    onChange={e => setTanggalCheckin(e.target.value)}
                   />
                 </div>
               </div>
+              <div className="mb-5">
+                <label
+                  htmlFor="tanggalBayar"
+                  className="block mb-2 text-sm font-medium text-gray-900"
+                >
+                  Tanggal Checkout
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
+                    <svg
+                      className="w-4 h-4 text-gray-500 dark:text-gray-400"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                    </svg>
+                  </div>
+                  <input
+                    id="tanggalBayar"
+                    datepicker="true"
+                    type="datetime-local"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="Pilih tanggal bayar"
+                    value={tanggalCheckout}
+                    onChange={e => setTanggalCheckout(e.target.value)}
+                  />
+                </div>
               </div>
               <div className="mb-5">
                 <label

@@ -25,7 +25,7 @@ export default function ListRiwayatPelanggan() {
           <button
             type="button"
             className="flex items-center group"
-            onClick={() => navigate(-1)}
+            onClick={() => navigate('/dashboard/daftar-pelanggan')}
           >
             <svg
               className="w-4 h-4 text-gray-800 me-1 transition-all group-hover:me-2"
@@ -40,7 +40,7 @@ export default function ListRiwayatPelanggan() {
                 strokeWidth="2" d="M13 5H1m0 0 4 4M1 5l4-4"
               />
             </svg>
-            <span>Kembali</span>
+            <span>Kembali ke daftar pelanggan</span>
           </button>
         </div>
         <table className="w-full text-sm text-left rtl:text-right text-gray-700 sm:text-base">
@@ -95,6 +95,19 @@ export default function ListRiwayatPelanggan() {
 }
 
 function ListPembayaran({ pelanggan }) {
+  const downloadPDF = (id) => {
+    // Ganti URL dengan URL tempat menyimpan file PDF yang sudah ada
+    const pdfUrl = `${import.meta.env.VITE_API_URL}/cetakPembayaran/${id}`
+
+    // Buat elemen <a> dengan atribut download untuk mengunduh file PDF
+    const link = document.createElement('a')
+    link.href = pdfUrl
+    link.download = 'existing.pdf'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
+
   const component = pelanggan.pembayaran && pelanggan.pembayaran.length > 0 ? (pelanggan.pembayaran.map(item => (
       <tr key={item.id} className="bg-white border-bhover:bg-gray-100">
         <td className="px-6 py-4 whitespace-nowrap">
@@ -115,8 +128,18 @@ function ListPembayaran({ pelanggan }) {
         <td className="px-6 py-4 whitespace-nowrap">
           {item.keterangan && item.keterangan}
         </td>
-        <td className="px-6 py-4 whitespace-nowrap">
-          <Link to={`/dashboard/riwayat-pembayaran/${pelanggan.id}/${item.id}`} className="font-medium text-red-600 dark:text-red-500 hover:underline">Batal</Link>
+        <td className="flex items-center px-6 py-4 whitespace-nowrap">
+          <button type="button" onClick={() => downloadPDF(item.id)} className="font-medium text-green-600">
+            <svg className="w-4 h-4 text-green-600 hover:underline ms-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M5 20h10a1 1 0 0 0 1-1v-5H4v5a1 1 0 0 0 1 1Z"/>
+              <path d="M18 7H2a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2v-3a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2Zm-1-2V2a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v3h14Z"/>
+            </svg>
+          </button>
+          <Link to={`/dashboard/riwayat-pembayaran/${pelanggan.id}/${item.id}`} className="ms-4 font-medium text-red-600 hover:underline">
+            <svg className="w-4 h-4 text-red-600 hover:underline" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 20">
+              <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 5h16M7 8v8m4-8v8M7 1h4a1 1 0 0 1 1 1v3H6V2a1 1 0 0 1 1-1ZM3 5h12v13a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5Z"/>
+            </svg>
+          </Link>
         </td>
       </tr>
     ))

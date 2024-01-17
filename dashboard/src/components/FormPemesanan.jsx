@@ -36,7 +36,7 @@ export default function FormPemesanan() {
     formData.append('name', nama)
     formData.append('number', noHP)
     formData.append('address', alamat)
-    formData.append('day', durasi.toString()) // Mengirim durasi pemesanan
+    formData.append('day', durasi) // Mengirim durasi pemesanan
     formData.append('check_in', tanggalCheckin)
     formData.append('check_out', tanggalCheckout)
     formData.append('total', totalPembayaran)

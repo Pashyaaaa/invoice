@@ -95,6 +95,19 @@ export default function ListPelanggan() {
 }
 
 function ListComponent({ sortedPelanggan }) {
+  const downloadPDF = (id) => {
+    // Ganti URL dengan URL tempat menyimpan file PDF yang sudah ada
+    const pdfUrl = `${import.meta.env.VITE_API_URL}/cetakInvoice/${id}`
+
+    // Buat elemen <a> dengan atribut download untuk mengunduh file PDF
+    const link = document.createElement('a')
+    link.href = pdfUrl
+    link.download = 'existing.pdf'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
+
   const component = sortedPelanggan && sortedPelanggan.length > 0 ? sortedPelanggan.map((item, i) => (
     <tr key={item.id} className="odd:bg-white even:bg-gray-50 border-b">
       <th
@@ -173,6 +186,12 @@ function ListComponent({ sortedPelanggan }) {
             <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.109 17H1v-2a4 4 0 0 1 4-4h.87M10 4.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Zm7.95 2.55a2 2 0 0 1 0 2.829l-6.364 6.364-3.536.707.707-3.536 6.364-6.364a2 2 0 0 1 2.829 0Z"/>
           </svg>
         </Link>
+        <button type="button" onClick={() => downloadPDF(item.id)}>
+          <svg className="w-4 h-4 text-green-600 hover:underline ms-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M5 20h10a1 1 0 0 0 1-1v-5H4v5a1 1 0 0 0 1 1Z"/>
+            <path d="M18 7H2a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2v-3a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2Zm-1-2V2a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v3h14Z"/>
+          </svg>
+        </button>
         <Link
           to={`/dashboard/daftar-pelanggan/hapus-invoice/${item.id}`}
           className="font-medium ms-4"
