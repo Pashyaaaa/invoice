@@ -174,7 +174,7 @@ export const cetakPembayaran = async (req, res) => {
         align: "center",
       })
 
-      .moveDown(15);
+      .moveDown(12);
 
     doc.font(fontItalic).text(pembayaranTanggalBayar, {
       align: "right",
