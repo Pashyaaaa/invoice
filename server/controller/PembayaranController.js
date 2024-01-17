@@ -4,8 +4,14 @@ import fs from "fs";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import path from "path";
+import terbilang from "terbilang";
 const Invoice = db.models.invoice;
 const Pembayaran = db.models.pembayaran;
+
+const terbilangOptions = {
+  output: { style: "text" },
+  input: "number",
+};
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -13,7 +19,14 @@ const __dirname = dirname(__filename);
 export const getPembayaran = async (req, res) => {
   try {
     const response = await Pembayaran.findAll({
-      attributes: ["id", "bayar", "keterangan", "tanggal_bayar", "invoice_id"],
+      attributes: [
+        "id",
+        "bayar",
+        "keterangan",
+        "tanggal_bayar",
+        "nomer_pembayaran",
+        "invoice_id",
+      ],
       where: {
         isDeleted: false,
       },
@@ -27,6 +40,7 @@ export const getPembayaran = async (req, res) => {
             "day",
             "check_in",
             "check_out",
+            "nomer_invoice",
             "createdAt",
           ],
         },
@@ -45,6 +59,7 @@ export const addPembayaran = async (req, res) => {
   const { bayar, keterangan, tanggal_bayar, invoice_id } = req.body;
   try {
     const calInvoice = await Invoice.findByPk(invoice_id);
+    const nomerPembayaran = Math.round(Math.random() * 999999999);
 
     if (!calInvoice) {
       return res.status(404).json({ message: "Invoice not found" });
@@ -62,6 +77,7 @@ export const addPembayaran = async (req, res) => {
       bayar: bayar,
       keterangan: keterangan,
       tanggal_bayar: tanggal_bayar,
+      nomer_pembayaran: nomerPembayaran,
       invoice_id: invoice_id,
     });
 
@@ -91,6 +107,8 @@ export const cetakPembayaran = async (req, res) => {
   const { id } = req.params;
   try {
     const pembayaran = await Pembayaran.findByPk(id);
+    const invoice = await Invoice.findByPk(pembayaran.invoice_id);
+    const nomerInvoice = invoice.nomer_invoice;
 
     if (!pembayaran) {
       return res
@@ -104,7 +122,7 @@ export const cetakPembayaran = async (req, res) => {
       __dirname,
       "..",
       "public",
-      `${angkaRandom}pembayaran_${pembayaran.id}.pdf`
+      `${pembayaran.nomer_pembayaran}${pembayaran.id}pembayaran_0024.pdf`
     );
 
     const doc = new PDFDocument();
@@ -112,24 +130,61 @@ export const cetakPembayaran = async (req, res) => {
 
     doc.pipe(stream);
 
-    const judul = "Riwayat Pembayaran";
+    const judul = "Tanda Terima Pembayaran";
+    const sub_judul = `Nomor: ${pembayaran.nomer_pembayaran}${pembayaran.id}pembayaran_0024`;
     const fontBold = "Helvetica-Bold";
+    const fontBiasa = "Helvetica";
     const fontItalic = "Helvetica-Oblique";
 
-    doc.font(fontBold).fontSize(20).text(judul, {
+    doc.font(fontBold).fontSize(25).text(judul, {
       align: "center",
     });
-    doc.moveDown();
+    doc
+      .font(fontItalic)
+      .fontSize(14)
+      .text(sub_judul, {
+        align: "center",
+      })
+      .moveDown(8);
 
-    doc.text(
-      `Nominal: Rp${pembayaran.bayar.replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`
+    const bTerbilang = terbilang(parseInt(pembayaran.bayar), terbilangOptions);
+    const bayarTerbilang = bTerbilang.replace(/\w+/g, (word) => {
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    });
+    const pembayaranTanggalBayar = String(pembayaran.tanggal_bayar).substring(
+      0,
+      15
     );
-    doc.text(`Tanggal Bayar: ${pembayaran.tanggal_bayar}`);
-    doc.text(`Keterangan: ${pembayaran.keterangan}`).moveDown(15);
 
-    doc.text("TTD. Penjual", {
-      columns: 3,
-      columnGap: 15,
+    doc
+      .font(fontBiasa)
+      .fontSize(16)
+      .text(
+        `Telah diterima sejumlah uang sebesar Rp${pembayaran.bayar.replace(
+          /\B(?=(\d{3})+(?!\d))/g,
+          "."
+        )} (${bayarTerbilang} Rupiah) Sebagai Dp/Lunas Terhadap Nomer Invoice:`,
+        {
+          width: 500,
+          lineGap: 6,
+        }
+      )
+      .font(fontBold)
+      .text(`${nomerInvoice}Invoice_0024`, {
+        align: "center",
+      })
+
+      .moveDown(15);
+
+    doc.font(fontItalic).text(pembayaranTanggalBayar, {
+      align: "right",
+    });
+    doc
+      .text("Penerima,", {
+        align: "right",
+      })
+      .moveDown(5);
+    doc.text("(                                      )", {
       align: "right",
     });
 
@@ -138,7 +193,7 @@ export const cetakPembayaran = async (req, res) => {
       res.setHeader("Content-Type", "application/pdf");
       res.setHeader(
         "Content-Disposition",
-        `attachment; filename=pembayaran_${pembayaran.id}.pdf`
+        `attachment; filename=${pembayaran.nomer_pembayaran}${pembayaran.id}pembayaran_0024.pdf`
       );
 
       const fileStream = fs.createReadStream(pdfPath);

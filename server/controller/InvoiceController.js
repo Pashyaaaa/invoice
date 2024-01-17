@@ -29,6 +29,7 @@ export const getInvoice = async (req, res) => {
         "check_out",
         "total",
         "sisa_bayar",
+        "nomer_invoice",
         "createdAt",
       ],
       include: [
@@ -71,6 +72,7 @@ export const getInvoiceById = async (req, res) => {
         "check_out",
         "total",
         "sisa_bayar",
+        "nomer_invoice",
         "createdAt",
       ],
       include: [
@@ -103,6 +105,7 @@ export const getInvoiceById = async (req, res) => {
 
 export const addInvoice = async (req, res) => {
   const { name, number, address, day, check_in, check_out, total } = req.body;
+  const nomerInvoice = Math.round(Math.random() * 999999999);
 
   try {
     await Invoice.create({
@@ -114,6 +117,7 @@ export const addInvoice = async (req, res) => {
       check_out: check_out,
       total: total,
       sisa_bayar: total,
+      nomer_invoice: nomerInvoice,
     });
 
     res.status(201).json({ message: "Tagihan Berhasil Ditambahkan" });
@@ -200,13 +204,11 @@ export const cetakInvoice = async (req, res) => {
       return res.status(404).json({ error: "invoice/tagihan not found" });
     }
 
-    const angkaRandom = Math.round(Math.random() * 9999);
-
     const pdfPath = path.join(
       __dirname,
       "..",
       "public",
-      `${angkaRandom}invoice_${invoice.id}.pdf`
+      `${invoice.nomer_invoice}${invoice.id}invoice_0024.pdf`
     );
 
     const doc = new PDFDocument({
@@ -224,11 +226,10 @@ export const cetakInvoice = async (req, res) => {
     doc.moveDown();
 
     const invoiceCreatedAt = String(invoice.createdAt).substring(0, 15);
-    // Surat Formal
     doc.fontSize(9).text(`Kepada: ${invoice.name}`);
     doc.text(`Perihal: Tagihan`);
     doc.text(
-      `Nomer Invoice: 0024-${Math.round(Math.random() * 9999)}-${invoice.id}`
+      `Nomer Invoice: ${invoice.nomer_invoice}${invoice.id}invoice_0024`
     );
     doc.text(`Tanggal Tagihan: ${invoiceCreatedAt}`);
     doc.moveDown(8);
@@ -239,16 +240,6 @@ export const cetakInvoice = async (req, res) => {
       /\B(?=(\d{3})+(?!\d))/g,
       "."
     )}`;
-
-    // Tabel
-    //? const table = {
-    //   headers: ["Check In", "Check Out", "Jumlah Hari", "Total"],
-    //   rows: [[invoiceCheck_in, invoiceCheck_out, invoice.day, invoiceTotal]],
-    // };
-
-    // await doc.table(table, {
-    //   width: 300,
-    // });
 
     const table = {
       headers: [
@@ -262,12 +253,11 @@ export const cetakInvoice = async (req, res) => {
         },
         { label: "Total", property: "total", width: 135, align: "right" },
       ],
-      // complex data
       datas: [
         {
           // options: { {{styling disini}} },
           check_in: invoiceCheck_in,
-          check_out: invoiceCheck_in,
+          check_out: invoiceCheck_out,
           jumlah_hari: {
             label: invoice.day,
             options: { align: "right" },
@@ -301,7 +291,7 @@ export const cetakInvoice = async (req, res) => {
       res.setHeader("Content-Type", "application/pdf");
       res.setHeader(
         "Content-Disposition",
-        `attachment; filename=${angkaRandom}invoice_${invoice.id}.pdf`
+        `attachment; filename=${invoice.nomer_invoice}${invoice.id}invoice_0024.pdf`
       );
 
       const fileStream = fs.createReadStream(pdfPath);

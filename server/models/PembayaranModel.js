@@ -8,6 +8,7 @@ const Pembayaran = {
     defaultValue: DataTypes.NOW,
     allowNull: false,
   },
+  nomer_pembayaran: DataTypes.STRING,
   isDeleted: {
     type: DataTypes.BOOLEAN,
     defaultValue: false,

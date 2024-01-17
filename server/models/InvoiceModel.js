@@ -18,6 +18,7 @@ const Invoice = {
     defaultValue: DataTypes.NOW,
     allowNull: false,
   },
+  nomer_invoice: DataTypes.STRING,
   isDeleted: {
     type: DataTypes.BOOLEAN,
     defaultValue: false,
